@@ -54,6 +54,8 @@
         </div>
     </header>
 
+    
+
     <!-- Hero Section -->
     <section id="hero" class="hero-section">
         <!-- Background Slideshow -->
@@ -64,6 +66,25 @@
             <div class="slide" style="background-image: url('assets/images/slide_3.png');"></div>
             <div class="hero-overlay"></div>
         </div>
+
+        <!-- Futuristic Viewfinder HUD Overlay -->
+        <div class="viewfinder-hud">
+            <div class="viewfinder-corner tl"></div>
+            <div class="viewfinder-corner tr"></div>
+            <div class="viewfinder-corner bl"></div>
+            <div class="viewfinder-corner br"></div>
+            <div class="hud-center-crosshair"></div>
+            <div class="hud-metadata scroll-reveal">
+                <div class="hud-item"><span class="hud-label">CAM</span><span class="hud-val">A</span></div>
+                <div class="hud-item"><span class="hud-label">FPS</span><span class="hud-val">24.00</span></div>
+                <div class="hud-item"><span class="hud-label">SHUTTER</span><span class="hud-val">180.0°</span></div>
+                <div class="hud-item"><span class="hud-label">ISO</span><span class="hud-val">800</span></div>
+            </div>
+            <div class="hud-timecode scroll-reveal">
+                <span class="rec-dot"></span>
+                <span class="tc-val">00:04:31:18</span>
+            </div>
+        </div>
         
         <div class="container hero-content-wrapper">
             <div class="hero-content">
@@ -72,7 +93,7 @@
                 <p class="hero-description scroll-reveal">Where every frame begins with purpose. <br><span class="hero-subline">Ad Films &bull; Line Production &bull; Visual Media</span></p>
                 
                 <div class="hero-actions scroll-reveal">
-                    <button class="btn btn-primary play-showreel-btn" data-video-id="9XaS93W8VfQ">
+                    <button class="btn btn-primary play-showreel-btn" data-video-id="sYptig81tP0">
                         <svg class="icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
                         </svg>
@@ -178,7 +199,7 @@
                 <div class="title-line scroll-reveal"></div>
             </div>
 
-            <div class="showreel-player-container scroll-reveal play-showreel-btn" data-video-id="9XaS93W8VfQ">
+            <div class="showreel-player-container scroll-reveal play-showreel-btn" data-video-id="sYptig81tP0">
                 <img src="assets/images/portfolio_1.png" alt="Pillarthree Productions Reel Thumbnail" class="showreel-thumbnail">
                 <div class="showreel-overlay-play">
                     <div class="play-pulse-btn">
@@ -483,7 +504,7 @@
             <button class="modal-close-btn" id="modal-close" aria-label="Close modal">&times;</button>
             <div class="modal-body">
                 <div class="iframe-container">
-                    <iframe id="showreel-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe id="showreel-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             </div>
         </div>

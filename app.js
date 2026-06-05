@@ -148,11 +148,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeShowreelBtn = document.getElementById('modal-close');
     const playShowreelBtns = document.querySelectorAll('.play-showreel-btn');
 
+    // Extract 11-digit YouTube video ID from various URL formats
+    const extractYoutubeId = (urlOrId) => {
+        if (!urlOrId) return '';
+        const trimmed = urlOrId.trim();
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = trimmed.match(regExp);
+        
+        if (match && match[2].length === 11) {
+            return match[2];
+        }
+        
+        if (trimmed.length === 11) {
+            return trimmed;
+        }
+        
+        return '';
+    };
+
     if (showreelModal && showreelIframe && closeShowreelBtn) {
         playShowreelBtns.forEach(button => {
             button.addEventListener('click', () => {
-                const videoId = button.getAttribute('data-video-id');
+                const rawVideoId = button.getAttribute('data-video-id');
+                const videoId = extractYoutubeId(rawVideoId);
+                
                 if (videoId) {
+                    // Check if it's a Short (URL contains 'shorts' or has data-video-type="short" or matches the user's specific Short ID)
+                    const isShort = (rawVideoId && rawVideoId.includes('shorts')) || 
+                                    button.getAttribute('data-video-type') === 'short' ||
+                                    videoId === 'sYptig81tP0'; // Treat the user's current video ID as a Short
+                    
+                    if (isShort) {
+                        showreelModal.classList.add('modal-vertical');
+                    } else {
+                        showreelModal.classList.remove('modal-vertical');
+                    }
+                    
                     const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
                     showreelIframe.setAttribute('src', embedUrl);
                     showreelModal.classList.add('active');
@@ -163,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const closeShowreelModal = () => {
             showreelModal.classList.remove('active');
+            showreelModal.classList.remove('modal-vertical');
             showreelIframe.setAttribute('src', '');
             document.body.style.overflow = 'auto';
         };
