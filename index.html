@@ -200,7 +200,10 @@
             </div>
 
             <div class="showreel-player-container scroll-reveal play-showreel-btn" data-video-id="sYptig81tP0">
-                <img src="assets/images/portfolio_1.webp" alt="Pillarthree Productions Reel Thumbnail" class="showreel-thumbnail">
+                <picture class="showreel-thumbnail">
+                    <source srcset="assets/images/portfolio_1.webp" media="(max-width: 768px)">
+                    <img src="assets/images/portfolio_1_horizontal.webp" alt="Pillarthree Productions Reel Thumbnail" class="showreel-thumbnail-img">
+                </picture>
                 <div class="showreel-overlay-play">
                     <div class="play-pulse-btn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

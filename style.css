@@ -815,9 +815,9 @@ p {
 .showreel-player-container {
     position: relative;
     width: 100%;
-    max-width: 360px; /* Constrain width to look like a mobile phone / Reel */
+    max-width: 640px; /* PC: horizontal, elegant and bigger */
     margin: 0 auto;
-    aspect-ratio: 9/16; /* Portrait Reels aspect ratio */
+    aspect-ratio: 16/9; /* PC: Horizontal aspect ratio */
     overflow: hidden;
     cursor: pointer;
     border: 1px solid rgba(255, 255, 255, 0.03);
@@ -870,7 +870,9 @@ p {
 }
 
 
-.showreel-thumbnail {
+.showreel-thumbnail,
+.showreel-thumbnail-img,
+.showreel-thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -927,7 +929,8 @@ p {
     transition: var(--transition-medium);
 }
 
-.showreel-player-container:hover .showreel-thumbnail {
+.showreel-player-container:hover .showreel-thumbnail img,
+.showreel-player-container:hover .showreel-thumbnail-img {
     transform: scale(1.03);
     filter: brightness(0.75);
 }
@@ -1869,6 +1872,11 @@ p {
     
     .section-padding {
         padding: 6rem 0;
+    }
+    
+    .showreel-player-container {
+        max-width: 360px; /* Mobile: vertical, a bit bigger */
+        aspect-ratio: 9/16; /* Mobile: Portrait aspect ratio */
     }
     
     .hero-content {
