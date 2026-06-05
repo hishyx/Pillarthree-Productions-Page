@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showreelIframe = document.getElementById('showreel-iframe');
     const closeShowreelBtn = document.getElementById('modal-close');
     const playShowreelBtns = document.querySelectorAll('.play-showreel-btn');
+    const instaReelCards = document.querySelectorAll('.insta-reel-card');
 
     // Extract 11-digit YouTube video ID from various URL formats
     const extractYoutubeId = (urlOrId) => {
@@ -192,9 +193,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Instagram Reels Embed Modal Event Listener
+        instaReelCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = card.getAttribute('href');
+                const match = url.match(/\/reel\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    const reelId = match[1];
+                    const embedUrl = `https://www.instagram.com/reel/${reelId}/embed/`;
+                    
+                    showreelModal.classList.add('modal-vertical');
+                    showreelModal.classList.add('modal-instagram');
+                    showreelIframe.setAttribute('src', embedUrl);
+                    showreelModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
         const closeShowreelModal = () => {
             showreelModal.classList.remove('active');
             showreelModal.classList.remove('modal-vertical');
+            showreelModal.classList.remove('modal-instagram');
             showreelIframe.setAttribute('src', '');
             document.body.style.overflow = 'auto';
         };

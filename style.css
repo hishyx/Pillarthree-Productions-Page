@@ -814,13 +814,60 @@ p {
 .showreel-player-container {
     position: relative;
     width: 100%;
-    max-width: 800px; /* Constrain width so it is not overwhelming on desktop */
+    max-width: 360px; /* Constrain width to look like a mobile phone / Reel */
     margin: 0 auto;
-    aspect-ratio: 2.1/1; /* Cinematic anamorphic aspect ratio */
+    aspect-ratio: 9/16; /* Portrait Reels aspect ratio */
     overflow: hidden;
     cursor: pointer;
     border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: var(--transition-medium);
 }
+
+.showreel-player-container::before,
+.showreel-player-container::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 1px solid transparent;
+    transition: var(--transition-medium);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.showreel-player-container::before {
+    top: 15px;
+    left: 15px;
+    border-top-color: rgba(197, 168, 128, 0.15);
+    border-left-color: rgba(197, 168, 128, 0.15);
+}
+
+.showreel-player-container::after {
+    bottom: 15px;
+    right: 15px;
+    border-bottom-color: rgba(197, 168, 128, 0.15);
+    border-right-color: rgba(197, 168, 128, 0.15);
+}
+
+.showreel-player-container:hover {
+    border-color: rgba(197, 168, 128, 0.25);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), var(--neon-gold-glow);
+}
+
+.showreel-player-container:hover::before {
+    border-top-color: var(--accent-gold);
+    border-left-color: var(--accent-gold);
+    width: 15px;
+    height: 15px;
+}
+
+.showreel-player-container:hover::after {
+    border-bottom-color: var(--accent-gold);
+    border-right-color: var(--accent-gold);
+    width: 15px;
+    height: 15px;
+}
+
 
 .showreel-thumbnail {
     width: 100%;
@@ -1664,6 +1711,12 @@ p {
     height: 80vh;
     width: auto;
 }
+
+.modal.modal-instagram .modal-content-container {
+    background: #ffffff;
+    border: none;
+}
+
 
 .modal-close-btn {
     position: absolute;
