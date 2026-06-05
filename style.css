@@ -293,6 +293,7 @@ p {
     color: var(--text-secondary);
     position: relative;
     padding: 0.5rem 0;
+    white-space: nowrap;
 }
 
 .nav-link::after {
