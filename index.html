@@ -531,20 +531,40 @@
                 </div>
 
                 <div class="contact-form-wrapper-refined scroll-reveal">
-                    <form id="redesigned-contact-form" class="contact-form-refined" action="#" method="POST" onsubmit="event.preventDefault(); alert('Message sent successfully. Our production team will contact you.');">
+                    <!-- Hidden Iframe to prevent page redirection on submit -->
+                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+                    <!-- Success Message (Initially Hidden) -->
+                    <div id="contact-success" class="form-success-message" style="display: none; text-align: center; padding: 2.5rem 0;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#C5A880" stroke-width="1.5" style="width: 56px; height: 56px; margin: 0 auto 1.5rem; display: block;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M8 12.5l3 3 5-6"></path>
+                        </svg>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 1rem; color: var(--text-primary); letter-spacing: 0.08em;">Inquiry Sent</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; font-weight: 200; max-width: 380px; margin: 0 auto; line-height: 1.6;">Thank you for reaching out. Our production team will review your brief and contact you shortly.</p>
+                    </div>
+
+                    <!-- Custom Contact Form linked to Google Forms -->
+                    <form id="redesigned-contact-form" class="contact-form-refined" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSf9dYw1K8s8Es4LbD9lJ0mkroVizVLp2Aw4YOULuYhE_-pT9w/formResponse" method="POST" target="hidden_iframe" onsubmit="document.getElementById('redesigned-contact-form').style.display = 'none'; document.getElementById('contact-success').style.display = 'block';">
+                        <!-- Google Forms hidden verification parameters -->
+                        <input type="hidden" name="fvv" value="1">
+                        <input type="hidden" name="partialResponse" value="[null,null,&quot;-2174859368692196020&quot;]">
+                        <input type="hidden" name="pageHistory" value="0">
+                        <input type="hidden" name="fbzx" value="-2174859368692196020">
+                        
                         <div class="form-row">
                             <div class="form-group-refined">
                                 <label for="form-name">Name</label>
-                                <input type="text" id="form-name" placeholder="Name" required>
+                                <input type="text" id="form-name" name="entry.1878642053" placeholder="Name" required>
                             </div>
                             <div class="form-group-refined">
                                 <label for="form-email">Email</label>
-                                <input type="email" id="form-email" placeholder="Email" required>
+                                <input type="email" id="form-email" name="entry.1793806918" placeholder="Email" required>
                             </div>
                         </div>
                         <div class="form-group-refined">
                             <label for="form-message">Brief Details</label>
-                            <textarea id="form-message" rows="4" placeholder="Briefly describe your project details, location, and timeline..." required></textarea>
+                            <textarea id="form-message" name="entry.1152387229" rows="4" placeholder="Briefly describe your project details, location, and timeline..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Send Inquiry</button>
                     </form>
