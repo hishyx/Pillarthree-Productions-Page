@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showreelIframe = document.getElementById('showreel-iframe');
     const closeShowreelBtn = document.getElementById('modal-close');
     const playShowreelBtns = document.querySelectorAll('.play-showreel-btn');
-    const instaReelCards = document.querySelectorAll('.insta-reel-card');
+    const instaReelCards = document.querySelectorAll('a.insta-reel-card');
 
     // Extract 11-digit YouTube video ID from various URL formats
     const extractYoutubeId = (urlOrId) => {
@@ -168,27 +168,53 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (showreelModal && showreelIframe && closeShowreelBtn) {
+        const showreelVideo = document.getElementById('showreel-video');
+        const showreelVideoContainer = document.getElementById('showreel-video-container');
+        const showreelIframeContainer = document.getElementById('showreel-iframe-container');
+
         playShowreelBtns.forEach(button => {
             button.addEventListener('click', () => {
+                const videoSrc = button.getAttribute('data-video-src');
                 const rawVideoId = button.getAttribute('data-video-id');
-                const videoId = extractYoutubeId(rawVideoId);
-                
-                if (videoId) {
-                    // Check if it's a Short (URL contains 'shorts' or has data-video-type="short" or matches the user's specific Short ID)
-                    const isShort = (rawVideoId && rawVideoId.includes('shorts')) || 
-                                    button.getAttribute('data-video-type') === 'short' ||
-                                    videoId === 'sYptig81tP0'; // Treat the user's current video ID as a Short
+
+                if (videoSrc) {
+                    // Show local MP4 video container and hide iframe container
+                    if (showreelIframeContainer) showreelIframeContainer.style.display = 'none';
+                    if (showreelVideoContainer) showreelVideoContainer.style.display = 'block';
                     
-                    if (isShort) {
-                        showreelModal.classList.add('modal-vertical');
-                    } else {
-                        showreelModal.classList.remove('modal-vertical');
+                    showreelModal.classList.remove('modal-vertical');
+                    showreelModal.classList.remove('modal-instagram');
+                    
+                    if (showreelVideo) {
+                        showreelVideo.setAttribute('src', videoSrc);
+                        showreelVideo.load();
+                        showreelVideo.play().catch(err => console.log("Auto-play prevented", err));
                     }
-                    
-                    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-                    showreelIframe.setAttribute('src', embedUrl);
                     showreelModal.classList.add('active');
                     document.body.style.overflow = 'hidden';
+                } else if (rawVideoId) {
+                    // Fallback to YouTube iframe
+                    const videoId = extractYoutubeId(rawVideoId);
+                    if (videoId) {
+                        if (showreelVideoContainer) showreelVideoContainer.style.display = 'none';
+                        if (showreelIframeContainer) showreelIframeContainer.style.display = 'block';
+                        
+                        // Check if it's a Short
+                        const isShort = (rawVideoId && rawVideoId.includes('shorts')) || 
+                                        button.getAttribute('data-video-type') === 'short' ||
+                                        videoId === 'sYptig81tP0';
+                        
+                        if (isShort) {
+                            showreelModal.classList.add('modal-vertical');
+                        } else {
+                            showreelModal.classList.remove('modal-vertical');
+                        }
+                        
+                        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                        showreelIframe.setAttribute('src', embedUrl);
+                        showreelModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
                 }
             });
         });
@@ -202,6 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (match && match[1]) {
                     const reelId = match[1];
                     const embedUrl = `https://www.instagram.com/reel/${reelId}/embed/`;
+                    
+                    if (showreelVideoContainer) showreelVideoContainer.style.display = 'none';
+                    if (showreelIframeContainer) showreelIframeContainer.style.display = 'block';
                     
                     showreelModal.classList.add('modal-vertical');
                     showreelModal.classList.add('modal-instagram');
@@ -217,6 +246,10 @@ document.addEventListener('DOMContentLoaded', () => {
             showreelModal.classList.remove('modal-vertical');
             showreelModal.classList.remove('modal-instagram');
             showreelIframe.setAttribute('src', '');
+            if (showreelVideo) {
+                showreelVideo.pause();
+                showreelVideo.setAttribute('src', '');
+            }
             document.body.style.overflow = 'auto';
         };
 
