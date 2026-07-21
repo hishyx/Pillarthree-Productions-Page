@@ -4,8 +4,7 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pillarthree Productions is a premium Kerala-based film and media production company.">
-    <title>Pillarthree Productions</title>
+    <title>Projects - Pillarthree Productions</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,8 +16,8 @@
                 <img src="assets/images/logo.webp" alt="Pillarthree Productions Logo" class="logo-img">
             </a>
             <nav class="nav-menu" id="nav-menu">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="projects.html" class="nav-link active">Projects</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="contact.html" class="nav-link">Contact</a>
             </nav>
@@ -30,35 +29,25 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-bg">
-            <video src="assets/videos/promo.mp4" autoplay loop muted playsinline poster="assets/images/hero_bg.webp"></video>
-        </div>
-        <div class="hero-overlay"></div>
-        
-        <div class="container hero-content">
-            <span class="hero-tagline">Kerala, India Production House</span>
-            <h1 class="hero-title">Pillarthree <br><span style="color: var(--text-accent);">Productions</span></h1>
-            
-            <div class="hero-actions">
-                <a href="projects.html" class="btn btn-primary">View Projects</a>
-                <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+    <!-- Projects Header -->
+    <section class="page-header reveal">
+        <div class="container">
+            <h1 class="section-title">Our Work</h1>
+            <div class="filter-nav">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="commercial">Commercial</button>
+                <button class="filter-btn" data-filter="brand-film">Brand Film</button>
+                <button class="filter-btn" data-filter="music-video">Music Video</button>
             </div>
         </div>
     </section>
 
-    <!-- Featured Projects -->
-    <section class="section-padding">
+    <!-- Projects Grid -->
+    <section class="section-padding" style="padding-top: var(--spacing-md);">
         <div class="container">
-            <div class="section-header reveal">
-                <span class="section-subtitle">Selected Work</span>
-                <h2 class="section-title">Featured Projects</h2>
-            </div>
-            
-            <div class="projects-grid">
+            <div class="projects-grid" id="portfolio-grid">
                 <!-- Project 1 -->
-                <a href="project-details.html" class="project-card reveal">
+                <a href="project-details.html" class="project-card reveal" data-category="commercial">
                     <img src="assets/images/project1.webp" alt="KMCT Medical College Hospital" class="project-img" loading="lazy">
                     <div class="project-overlay">
                         <span class="project-category">Commercial</span>
@@ -68,7 +57,7 @@
                 </a>
                 
                 <!-- Project 2 -->
-                <a href="project-details.html" class="project-card reveal">
+                <a href="project-details.html" class="project-card reveal" data-category="brand-film">
                     <img src="assets/images/project2.webp" alt="Beauty Mark Gold & Diamonds" class="project-img" loading="lazy">
                     <div class="project-overlay">
                         <span class="project-category">Brand Film</span>
@@ -78,7 +67,7 @@
                 </a>
                 
                 <!-- Project 3 -->
-                <a href="project-details.html" class="project-card reveal">
+                <a href="project-details.html" class="project-card reveal" data-category="commercial">
                     <img src="assets/images/project3.webp" alt="Edimannickal Opticals" class="project-img" loading="lazy">
                     <div class="project-overlay">
                         <span class="project-category">Commercial</span>
@@ -88,7 +77,7 @@
                 </a>
                 
                 <!-- Project 4 -->
-                <a href="project-details.html" class="project-card reveal">
+                <a href="project-details.html" class="project-card reveal" data-category="brand-film">
                     <img src="assets/images/project4.webp" alt="Popular Gold & Diamonds" class="project-img" loading="lazy">
                     <div class="project-overlay">
                         <span class="project-category">Brand Film</span>
@@ -98,7 +87,7 @@
                 </a>
                 
                 <!-- Project 5 -->
-                <a href="project-details.html" class="project-card reveal">
+                <a href="project-details.html" class="project-card reveal" data-category="music-video">
                     <img src="assets/images/project5.webp" alt="Harr Disha Music Video" class="project-img" loading="lazy">
                     <div class="project-overlay">
                         <span class="project-category">Music Video</span>
@@ -106,61 +95,6 @@
                         <span class="project-client">T-Series</span>
                     </div>
                 </a>
-                
-                <!-- Project 6 -->
-                <a href="projects.html" class="project-card reveal" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                    <h3 class="project-title" style="color: var(--text-accent);">View All Work →</h3>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Clients Strip -->
-    <div class="client-strip reveal">
-        <div class="client-track">
-            <!-- Simulated Logos -->
-            <h3 class="client-logo">T-Series</h3>
-            <h3 class="client-logo">KMCT</h3>
-            <h3 class="client-logo">Popular Gold</h3>
-            <h3 class="client-logo">Beauty Mark</h3>
-            <h3 class="client-logo">Edimannickal</h3>
-            <h3 class="client-logo">T-Series</h3>
-            <h3 class="client-logo">KMCT</h3>
-            <h3 class="client-logo">Popular Gold</h3>
-            <h3 class="client-logo">Beauty Mark</h3>
-            <h3 class="client-logo">Edimannickal</h3>
-        </div>
-    </div>
-
-    <!-- About Preview -->
-    <section class="section-padding">
-        <div class="container about-preview reveal">
-            <div class="about-preview-text">
-                <span class="section-subtitle">About The House</span>
-                <p>Based in Kerala, Pillarthree Productions is a film and media production company built around stories that connect.</p>
-                <a href="about.html" class="btn btn-secondary">Learn More →</a>
-            </div>
-            <div>
-                <img src="assets/images/portfolio_2.webp" alt="Production Team" style="width: 100%; aspect-ratio: 16/9; object-fit: cover;" loading="lazy">
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact CTA -->
-    <section class="contact-cta reveal">
-        <div class="container">
-            <h2>Let's Create Something Amazing.</h2>
-            <a href="contact.html" class="btn btn-primary">Start a Project</a>
-            
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span class="contact-label">Phone</span>
-                    <a href="tel:+919061818777" class="contact-value">+91 90618 18777</a>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-label">Email</span>
-                    <a href="mailto:pillarthreeproductions@gmail.com" class="contact-value">pillarthreeproductions@gmail.com</a>
-                </div>
             </div>
         </div>
     </section>

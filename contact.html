@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Pillarthree Productions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header scrolled" id="site-header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.webp" alt="Pillarthree Productions Logo" class="logo-img">
+            </a>
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+            </nav>
+            <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Contact Content -->
+    <section class="container contact-page-grid reveal">
+        <div>
+            <span class="section-subtitle">Get In Touch</span>
+            <h1 class="section-title">Ready? <br><span style="color: var(--text-accent);">Action.</span></h1>
+            <p style="margin: var(--spacing-sm) 0 var(--spacing-lg);">Bring a script, campaign brief, music video, documentary idea, or Kerala line-production requirement. The team will help shape it into a shoot-ready plan.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                <div>
+                    <span class="contact-label" style="display: block; margin-bottom: 0.25rem;">Book Us</span>
+                    <a href="tel:+919061818777" class="contact-value" style="display: block;">+91 90618 18777</a>
+                    <a href="tel:+919447512145" class="contact-value" style="display: block;">+91 94475 12145</a>
+                </div>
+                <div>
+                    <span class="contact-label" style="display: block; margin-bottom: 0.25rem;">Production Desk</span>
+                    <a href="mailto:pillarthreeproductions@gmail.com" class="contact-value">pillarthreeproductions@gmail.com</a>
+                </div>
+                <div>
+                    <span class="contact-label" style="display: block; margin-bottom: 0.25rem;">Studio</span>
+                    <span class="contact-value">Fort Kochi, Kerala, India</span>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+                <div class="form-group">
+                    <label for="name" class="contact-label">Name</label>
+                    <input type="text" id="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="contact-label">Email</label>
+                    <input type="email" id="email" required placeholder="Your email address">
+                </div>
+                <div class="form-group">
+                    <label for="message" class="contact-label">Message</label>
+                    <textarea id="message" rows="5" required placeholder="Briefly describe your project..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: var(--spacing-sm);">Send Inquiry</button>
+            </form>
+        </div>
+    </section>
+    
+    <div class="section-padding container reveal">
+        <!-- Google Map iframe mockup -->
+        <div style="width: 100%; height: 400px; background-color: var(--bg-secondary); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05);">
+            <p style="color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.875rem;">Interactive Map Location</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.webp" alt="Pillarthree Productions Logo" style="height: 30px;">
+                </a>
+                <nav class="footer-nav">
+                    <a href="projects.html">Projects</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pillarthree Productions. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/pillarthree_productions/" target="_blank">Instagram</a>
+                    <a href="https://www.youtube.com/@PillarThreeProductions" target="_blank">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

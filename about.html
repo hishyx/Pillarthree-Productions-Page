@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Pillarthree Productions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header scrolled" id="site-header">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.webp" alt="Pillarthree Productions Logo" class="logo-img">
+            </a>
+            <nav class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="about.html" class="nav-link active">About</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- About Content -->
+    <section class="about-hero container reveal">
+        <span class="section-subtitle">The House</span>
+        <h1 class="section-title">Three Creators.<br><span style="color: var(--text-accent);">One Vision.</span></h1>
+        
+        <div style="margin-top: var(--spacing-lg); display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg);">
+            <div>
+                <p style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: var(--spacing-md);">Based in Kerala, Pillarthree Productions is a film and media production company built around stories that connect.</p>
+                <p>We shape ideas into ad films, music videos, documentaries, corporate films, and full-scale production workflows, from first brief to final frame.</p>
+            </div>
+            <div>
+                <img src="assets/images/portfolio_2.webp" alt="Cinematic shooting on location Kerala" style="width: 100%; aspect-ratio: 16/9; object-fit: cover;" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="section-padding container reveal">
+        <div class="section-header">
+            <span class="section-subtitle">Leadership</span>
+            <h2 class="section-title">The Directors</h2>
+        </div>
+        
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="assets/images/team_jenson.webp" alt="Jenson Tx" loading="lazy">
+                <h3>Jenson Tx</h3>
+                <span class="project-category">Founder / Line Producer</span>
+            </div>
+            <div class="team-card">
+                <img src="assets/images/team_antony.webp" alt="Antony Jo" loading="lazy">
+                <h3>Antony Jo</h3>
+                <span class="project-category">Co-Founder / DOP</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section embedded minimal -->
+    <section class="section-padding container reveal" style="border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="section-header">
+            <span class="section-subtitle">Capabilities</span>
+            <h2 class="section-title">What We Do</h2>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--spacing-md);">
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Line Production</h3>
+                <p style="font-size: 0.875rem;">Physical production coordination across Kerala, including location support and crew planning.</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Ad Films</h3>
+                <p style="font-size: 0.875rem;">Television and digital campaigns for brands, handled from creative direction to delivery.</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Music Videos</h3>
+                <p style="font-size: 0.875rem;">Performance-led and narrative music videos with strong visual design.</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 0.5rem;">Documentaries</h3>
+                <p style="font-size: 0.875rem;">Human stories, field shoots, and real-world production handled with cinematic discipline.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.webp" alt="Pillarthree Productions Logo" style="height: 30px;">
+                </a>
+                <nav class="footer-nav">
+                    <a href="projects.html">Projects</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pillarthree Productions. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/pillarthree_productions/" target="_blank">Instagram</a>
+                    <a href="https://www.youtube.com/@PillarThreeProductions" target="_blank">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

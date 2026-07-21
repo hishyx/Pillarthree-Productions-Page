@@ -1,305 +1,208 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // ----------------------------------------------------
-    // 1. Mobile Menu Drawer Navigation
-    // ----------------------------------------------------
+import { getAllProjects, getFeaturedProjects, getProjectBySlug } from './src/js/api/projects.js';
+
+// Global error handler for image fallbacks provided by API
+window.handleImageError = function(img) {
+    const fallback = img.getAttribute('data-fallback');
+    if (fallback && img.src !== fallback) {
+        img.src = fallback;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // --- Mobile Menu Toggle ---
     const menuToggle = document.getElementById('menu-toggle');
     const navMenu = document.getElementById('nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
-
+    
     if (menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
             menuToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
         });
+    }
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                navMenu.classList.remove('active');
+    // --- Header Scroll Effect ---
+    const header = document.getElementById('site-header');
+    
+    if (header) {
+        if (!header.classList.contains('scrolled') || window.location.pathname.includes('project-details') || window.location.pathname.includes('about') || window.location.pathname.includes('contact')) {
+            // some pages have scrolled by default, let's keep the logic
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    // Only remove if it's not supposed to be permanently scrolled
+                    if (!document.querySelector('.page-header') && !document.querySelector('.project-hero') && !document.querySelector('.about-hero') && !document.querySelector('.contact-page-grid')) {
+                        header.classList.remove('scrolled');
+                    }
+                }
+            });
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            }
+        }
+    }
+
+    // Helper to generate project card HTML
+    function createProjectCard(project, isFeatured = false) {
+        // category to lowercase for data-category filter if needed
+        const categorySlug = project.category ? project.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'all';
+        return `
+            <a href="project-details.html?slug=${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
+                <img src="${project.thumbnail}" alt="${project.title}" ${project.thumbnailFallback ? `data-fallback="${project.thumbnailFallback}"` : ''} class="project-img" loading="lazy" onerror="handleImageError(this)">
+                <div class="project-overlay">
+                    <span class="project-category">${project.category || 'Project'}</span>
+                    <h3 class="project-title">${project.title}</h3>
+                    <span class="project-client">${project.client || ''}</span>
+                </div>
+            </a>
+        `;
+    }
+
+    // --- Dynamic Homepage Featured Projects ---
+    const homeProjectsGrid = document.querySelector('.projects-grid:not(#portfolio-grid)');
+    if (homeProjectsGrid && window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        try {
+            const featured = await getFeaturedProjects(5);
+            if (featured.length > 0) {
+                homeProjectsGrid.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
+                
+                // Add the "View All Work" card at the end
+                homeProjectsGrid.innerHTML += `
+                    <a href="projects.html" class="project-card reveal active" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                        <h3 class="project-title" style="color: var(--text-accent);">View All Work →</h3>
+                    </a>
+                `;
+            } else {
+                homeProjectsGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No featured projects available.</p>';
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // --- Dynamic Projects Page ---
+    const portfolioGrid = document.getElementById('portfolio-grid');
+    if (portfolioGrid) {
+        try {
+            const allProjects = await getAllProjects();
+            if (allProjects.length > 0) {
+                portfolioGrid.innerHTML = allProjects.map(p => createProjectCard(p)).join('');
+            } else {
+                portfolioGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No projects available.</p>';
+            }
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
+    // --- Dynamic Project Details Page ---
+    if (window.location.pathname.includes('project-details.html')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug');
+        
+        if (slug) {
+            try {
+                const project = await getProjectBySlug(slug);
+                if (project) {
+                    // Update page title
+                    document.title = `${project.title} - Pillarthree Productions`;
+                    
+                    // Update hero
+                    const heroImg = document.querySelector('.project-hero img');
+                    if (heroImg) {
+                        heroImg.src = project.thumbnail;
+                        heroImg.alt = project.title;
+                        if (project.thumbnailFallback) {
+                            heroImg.setAttribute('data-fallback', project.thumbnailFallback);
+                        }
+                        heroImg.setAttribute('onerror', 'handleImageError(this)');
+                    }
+                    
+                    // Update meta details
+                    const metaGrid = document.querySelector('.project-meta-grid');
+                    if (metaGrid) {
+                        metaGrid.innerHTML = `
+                            <div class="meta-box"><span class="meta-title">Client</span><span>${project.client || '-'}</span></div>
+                            <div class="meta-box"><span class="meta-title">Category</span><span>${project.category || '-'}</span></div>
+                            <div class="meta-box"><span class="meta-title">Director</span><span>${project.director || '-'}</span></div>
+                            <div class="meta-box"><span class="meta-title">Year</span><span>${project.year || '-'}</span></div>
+                        `;
+                    }
+                    
+                    // Update body
+                    const titleEl = document.querySelector('.project-body .section-title');
+                    if (titleEl) titleEl.textContent = project.title;
+                    
+                    const descEl = document.querySelector('.project-body p');
+                    if (descEl) descEl.textContent = project.description || '';
+                    
+                    const videoContainer = document.querySelector('.video-container');
+                    if (videoContainer) {
+                        if (project.youtubeId) {
+                            videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${project.youtubeId}" frameborder="0" allowfullscreen></iframe>`;
+                        } else {
+                            videoContainer.style.display = 'none';
+                        }
+                    }
+                    
+                    // Hide gallery on dynamic pages since we don't have gallery columns in sheet
+                    const gallery = document.querySelector('.project-gallery');
+                    if (gallery) gallery.style.display = 'none';
+                    
+                } else {
+                    document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            // No slug provided
+            document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
+        }
+    }
+
+    // --- Projects Filtering (on projects.html) ---
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    if (filterBtns.length > 0 && portfolioGrid) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filterValue = btn.getAttribute('data-filter');
+                const projectCards = document.querySelectorAll('#portfolio-grid .project-card');
+                
+                projectCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'block';
+                        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
+                    } else {
+                        if (card.getAttribute('data-category') === filterValue) {
+                            card.style.display = 'block';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 300);
+                        }
+                    }
+                });
             });
         });
     }
-
-    // ----------------------------------------------------
-    // 2. Hero Background Slideshow Crossfade
-    // ----------------------------------------------------
-    const slides = document.querySelectorAll('.hero-slideshow .slide');
-    let currentSlideIndex = 0;
-    const slideIntervalTime = 5000; // 5 seconds per slide
-
-    const nextSlide = () => {
-        if (slides.length > 0) {
-            slides[currentSlideIndex].classList.remove('active');
-            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-            slides[currentSlideIndex].classList.add('active');
-        }
-    };
-
-    if (slides.length > 1) {
-        setInterval(nextSlide, slideIntervalTime);
-    }
-
-    // ----------------------------------------------------
-    // 3. Navigation Header Scroll Effect & Active States
-    // ----------------------------------------------------
-    const siteHeader = document.getElementById('site-header');
-    const sections = document.querySelectorAll('section');
-
-    const handleScroll = () => {
-        if (window.scrollY > 50) {
-            siteHeader.classList.add('scrolled');
-        } else {
-            siteHeader.classList.remove('scrolled');
-        }
-
-        let currentSectionId = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 120;
-            const sectionHeight = section.offsetHeight;
-            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-                currentSectionId = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${currentSectionId}`) {
-                link.classList.add('active');
-            }
-        });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-
-    // ----------------------------------------------------
-    // 4. Horizontal Drag-to-Scroll for BTS Gallery
-    // ----------------------------------------------------
-    const btsTrack = document.querySelector('.bts-horizontal-track');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    if (btsTrack) {
-        btsTrack.addEventListener('mousedown', (e) => {
-            isDown = true;
-            btsTrack.classList.add('active');
-            startX = e.pageX - btsTrack.offsetLeft;
-            scrollLeft = btsTrack.scrollLeft;
-        });
-
-        btsTrack.addEventListener('mouseleave', () => {
-            isDown = false;
-            btsTrack.classList.remove('active');
-        });
-
-        btsTrack.addEventListener('mouseup', () => {
-            isDown = false;
-            btsTrack.classList.remove('active');
-        });
-
-        btsTrack.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - btsTrack.offsetLeft;
-            const walk = (x - startX) * 2; // scroll speed multiplier
-            btsTrack.scrollLeft = scrollLeft - walk;
-        });
-
-        // Prevent default browser dragging on images inside track to avoid breaks
-        const trackImages = btsTrack.querySelectorAll('img');
-        trackImages.forEach(img => {
-            img.addEventListener('dragstart', (e) => e.preventDefault());
-        });
-    }
-
-    // ----------------------------------------------------
-    // 5. Scroll Entrance Reveal (Intersection Observer)
-    // ----------------------------------------------------
-    const revealElements = document.querySelectorAll('.scroll-reveal');
     
-    if ('IntersectionObserver' in window) {
+    // Manual trigger of reveals for elements already in DOM
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length > 0) {
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
+                    entry.target.classList.add('active');
                     observer.unobserve(entry.target);
                 }
             });
-        }, {
-            threshold: 0.05,
-            rootMargin: '0px 0px -40px 0px'
-        });
-
-        revealElements.forEach(element => {
-            revealObserver.observe(element);
-        });
-    } else {
-        revealElements.forEach(element => {
-            element.classList.add('revealed');
-        });
-    }
-
-    // ----------------------------------------------------
-    // 6. Showreel Video Modal Controller
-    // ----------------------------------------------------
-    const showreelModal = document.getElementById('showreel-modal');
-    const showreelIframe = document.getElementById('showreel-iframe');
-    const closeShowreelBtn = document.getElementById('modal-close');
-    const playShowreelBtns = document.querySelectorAll('.play-showreel-btn');
-    const instaReelCards = document.querySelectorAll('a.insta-reel-card');
-
-    // Extract 11-digit YouTube video ID from various URL formats
-    const extractYoutubeId = (urlOrId) => {
-        if (!urlOrId) return '';
-        const trimmed = urlOrId.trim();
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = trimmed.match(regExp);
-        
-        if (match && match[2].length === 11) {
-            return match[2];
-        }
-        
-        if (trimmed.length === 11) {
-            return trimmed;
-        }
-        
-        return '';
-    };
-
-    if (showreelModal && showreelIframe && closeShowreelBtn) {
-        const showreelVideo = document.getElementById('showreel-video');
-        const showreelVideoContainer = document.getElementById('showreel-video-container');
-        const showreelIframeContainer = document.getElementById('showreel-iframe-container');
-
-        playShowreelBtns.forEach(button => {
-            button.addEventListener('click', () => {
-                const videoSrc = button.getAttribute('data-video-src');
-                const rawVideoId = button.getAttribute('data-video-id');
-
-                if (videoSrc) {
-                    // Show local MP4 video container and hide iframe container
-                    if (showreelIframeContainer) showreelIframeContainer.style.display = 'none';
-                    if (showreelVideoContainer) showreelVideoContainer.style.display = 'block';
-                    
-                    showreelModal.classList.remove('modal-vertical');
-                    showreelModal.classList.remove('modal-instagram');
-                    
-                    if (showreelVideo) {
-                        showreelVideo.setAttribute('src', videoSrc);
-                        showreelVideo.load();
-                        showreelVideo.play().catch(err => console.log("Auto-play prevented", err));
-                    }
-                    showreelModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                } else if (rawVideoId) {
-                    // Fallback to YouTube iframe
-                    const videoId = extractYoutubeId(rawVideoId);
-                    if (videoId) {
-                        if (showreelVideoContainer) showreelVideoContainer.style.display = 'none';
-                        if (showreelIframeContainer) showreelIframeContainer.style.display = 'block';
-                        
-                        // Check if it's a Short
-                        const isShort = (rawVideoId && rawVideoId.includes('shorts')) || 
-                                        button.getAttribute('data-video-type') === 'short' ||
-                                        videoId === 'sYptig81tP0';
-                        
-                        if (isShort) {
-                            showreelModal.classList.add('modal-vertical');
-                        } else {
-                            showreelModal.classList.remove('modal-vertical');
-                        }
-                        
-                        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-                        showreelIframe.setAttribute('src', embedUrl);
-                        showreelModal.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    }
-                }
-            });
-        });
-
-        // Instagram Reels Embed Modal Event Listener
-        instaReelCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                const url = card.getAttribute('href');
-                const match = url.match(/\/reel\/([a-zA-Z0-9_-]+)/);
-                if (match && match[1]) {
-                    const reelId = match[1];
-                    const embedUrl = `https://www.instagram.com/reel/${reelId}/embed/`;
-                    
-                    if (showreelVideoContainer) showreelVideoContainer.style.display = 'none';
-                    if (showreelIframeContainer) showreelIframeContainer.style.display = 'block';
-                    
-                    showreelModal.classList.add('modal-vertical');
-                    showreelModal.classList.add('modal-instagram');
-                    showreelIframe.setAttribute('src', embedUrl);
-                    showreelModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-            });
-        });
-
-        const closeShowreelModal = () => {
-            showreelModal.classList.remove('active');
-            showreelModal.classList.remove('modal-vertical');
-            showreelModal.classList.remove('modal-instagram');
-            showreelIframe.setAttribute('src', '');
-            if (showreelVideo) {
-                showreelVideo.pause();
-                showreelVideo.setAttribute('src', '');
-            }
-            document.body.style.overflow = 'auto';
-        };
-
-        closeShowreelBtn.addEventListener('click', closeShowreelModal);
-        showreelModal.querySelector('.modal-backdrop').addEventListener('click', closeShowreelModal);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && showreelModal.classList.contains('active')) {
-                closeShowreelModal();
-            }
-        });
-    }
-
-    // ----------------------------------------------------
-    // 7. Behind the Scenes Lightbox Modal Controller
-    // ----------------------------------------------------
-    const lightboxModal = document.getElementById('lightbox-modal');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    const closeLightboxBtn = document.getElementById('lightbox-close');
-    const btsCards = document.querySelectorAll('.bts-card-horizontal');
-
-    if (lightboxModal && lightboxImg && lightboxCaption && closeLightboxBtn) {
-        btsCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const imgSource = card.getAttribute('data-img-src');
-                const captionText = card.getAttribute('data-caption');
-                
-                if (imgSource) {
-                    lightboxImg.setAttribute('src', imgSource);
-                    lightboxCaption.textContent = captionText || '';
-                    lightboxModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
-            });
-        });
-
-        const closeLightbox = () => {
-            lightboxModal.classList.remove('active');
-            lightboxImg.setAttribute('src', '');
-            document.body.style.overflow = 'auto';
-        };
-
-        closeLightboxBtn.addEventListener('click', closeLightbox);
-        lightboxModal.querySelector('.modal-backdrop').addEventListener('click', closeLightbox);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightboxModal.classList.contains('active')) {
-                closeLightbox();
-            }
-        });
+        }, { root: null, threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
     }
 });
