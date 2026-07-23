@@ -150,6 +150,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const gallery = document.querySelector('.project-gallery');
                     if (gallery) gallery.style.display = 'none';
                     
+                    // --- Navigation Logic ---
+                    const allProjects = await getAllProjects();
+                    if (allProjects && allProjects.length > 0) {
+                        const currentIndex = allProjects.findIndex(p => p.slug === slug);
+                        if (currentIndex !== -1) {
+                            const prevIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
+                            const nextIndex = (currentIndex + 1) % allProjects.length;
+                            
+                            const prevProject = allProjects[prevIndex];
+                            const nextProject = allProjects[nextIndex];
+                            
+                            const prevLink = document.getElementById('btn-prev');
+                            const nextLink = document.getElementById('btn-next');
+                            
+                            if (prevLink) {
+                                prevLink.href = `project-details.html?slug=${prevProject.slug}`;
+                            }
+                            if (nextLink) {
+                                nextLink.href = `project-details.html?slug=${nextProject.slug}`;
+                            }
+                        }
+                    }
+                    
                 } else {
                     document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
                 }

@@ -734,3 +734,39 @@ a:hover {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Project Navigation */
+.project-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: 80px;
+  padding: 60px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-primary);
+}
+
+.btn-outline:hover {
+  border-color: var(--text-primary);
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+@media (max-width: 768px) {
+  .project-nav {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .project-nav .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
