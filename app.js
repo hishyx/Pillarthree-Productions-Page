@@ -292,4 +292,78 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, { root: null, threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
         revealElements.forEach(el => revealObserver.observe(el));
     }
+
+    // --- Web3Forms Contact Form Integration ---
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formMessage = document.getElementById('formMessage');
+
+    if (contactForm && submitBtn && formMessage) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Validate form
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !message) {
+                formMessage.style.display = 'block';
+                formMessage.style.color = '#ef4444'; // Red error
+                formMessage.textContent = 'Please fill out all required fields.';
+                return;
+            }
+
+            // Disable button, show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.style.opacity = '0.7';
+            submitBtn.style.cursor = 'not-allowed';
+            formMessage.style.display = 'none';
+
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        access_key: '644fd65e-43ef-45a2-9570-44aa888afc46',
+                        name: name,
+                        email: email,
+                        message: message,
+                        redirect: false
+                    })
+                });
+
+                const json = await response.json();
+
+                if (response.status === 200) {
+                    // Success
+                    formMessage.style.display = 'block';
+                    formMessage.style.color = '#10b981'; // Green success
+                    formMessage.textContent = "Thank you! Your message has been sent successfully. We'll get back to you soon.";
+                    contactForm.reset();
+                } else {
+                    // API Error
+                    formMessage.style.display = 'block';
+                    formMessage.style.color = '#ef4444'; // Red error
+                    formMessage.textContent = json.message || "Something went wrong. Please try again later.";
+                }
+            } catch (error) {
+                // Network Error
+                console.error(error);
+                formMessage.style.display = 'block';
+                formMessage.style.color = '#ef4444'; // Red error
+                formMessage.textContent = "Network error. Please check your connection and try again.";
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Inquiry';
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+            }
+        });
+    }
 });
