@@ -38,14 +38,14 @@ function normalizeProject(rawRow, index, existingSlugs) {
     // 1. Normalize Keys
     const row = normalizeRowKeys(rawRow);
 
-    // 2. Trim all values
+    // 2. Trim all values & apply fallbacks
     const title = (row.title || '').trim();
     const youtube = (row.youtube || '').trim();
-    const client = (row.client || '').trim();
-    const category = (row.category || '').trim();
-    const director = (row.director || '').trim();
-    const year = (row.year || '').trim();
-    const description = (row.description || '').trim();
+    const client = (row.client || '').trim() || 'Not specified';
+    const category = (row.category || '').trim() || 'Uncategorized';
+    const director = (row.director || '').trim() || 'Not specified';
+    const year = (row.year || '').trim() || 'Not specified';
+    const description = (row.description || '').trim() || 'Description coming soon.';
     let slug = (row.slug || '').trim();
     let thumbnail = (row.thumbnail || '').trim();
 
@@ -67,9 +67,11 @@ function normalizeProject(rawRow, index, existingSlugs) {
     }
 
     // Handle Duplicate Slugs
-    if (existingSlugs.has(slug)) {
-        console.warn(`[Projects API] Duplicate slug detected: "${slug}". Appending unique ID to prevent conflicts.`);
-        slug = `${slug}-${Math.random().toString(36).substr(2, 5)}`;
+    let baseSlug = slug;
+    let counter = 2;
+    while (existingSlugs.has(slug)) {
+        slug = `${baseSlug}-${counter}`;
+        counter++;
     }
     existingSlugs.add(slug);
 

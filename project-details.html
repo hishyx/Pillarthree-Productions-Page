@@ -30,8 +30,17 @@
     </header>
 
     <!-- Project Hero -->
-    <section class="project-hero reveal">
-        <img src="assets/images/project1.webp" alt="KMCT Medical College Hero" loading="lazy">
+    <section class="project-hero reveal" id="hero-media-container" tabindex="0" role="button" aria-label="Play Project Video">
+        <div class="hero-image-wrapper" id="hero-image-wrapper">
+            <img src="assets/images/project1.webp" alt="KMCT Medical College Hero" loading="lazy" id="hero-thumbnail">
+            <div class="hero-video-overlay"></div>
+            <div class="hero-play-button" id="hero-play-button">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </div>
+        </div>
+        <div id="hero-video-wrapper" class="hero-video-wrapper"></div>
     </section>
 
     <!-- Project Details -->
@@ -59,11 +68,7 @@
             <h1 class="section-title">KMCT Medical College</h1>
             <p style="max-width: 800px; margin-top: var(--spacing-sm);">A television and digital advertising campaign featuring Asif Ali. The production highlights advanced healthcare services, patient trust, and the institution's commitment to quality medical care through cinematic storytelling.</p>
             
-            <div class="video-container">
-                <!-- Placeholder for actual embed, using a video tag here for demo -->
-                <video src="assets/videos/project1.mp4" controls poster="assets/images/project1.webp" style="width: 100%; height: 100%; object-fit: cover;"></video>
-            </div>
-            
+
             <div class="project-gallery">
                 <img src="assets/images/project2.webp" alt="Gallery Image 1" loading="lazy">
                 <img src="assets/images/project3.webp" alt="Gallery Image 2" loading="lazy">
