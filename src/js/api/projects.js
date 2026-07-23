@@ -44,7 +44,7 @@ function normalizeProject(rawRow, index, existingSlugs) {
     const client = (row.client || '').trim() || 'Not specified';
     const category = (row.category || '').trim() || 'Uncategorized';
     const director = (row.director || '').trim() || 'Not specified';
-    const year = (row.year || '').trim() || 'Not specified';
+    const agency = (row.agency || '').trim() || 'Not specified';
     const description = (row.description || '').trim() || 'Description coming soon.';
     let slug = (row.slug || '').trim();
     let thumbnail = (row.thumbnail || '').trim();
@@ -88,7 +88,7 @@ function normalizeProject(rawRow, index, existingSlugs) {
         client,
         category,
         director,
-        year,
+        agency,
         description,
         youtube,
         youtubeId,

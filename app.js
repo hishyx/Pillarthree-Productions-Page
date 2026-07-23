@@ -1,7 +1,7 @@
 import { getAllProjects, getFeaturedProjects, getProjectBySlug } from './src/js/api/projects.js';
 
 // Global error handler for image fallbacks provided by API
-window.handleImageError = function(img) {
+window.handleImageError = function (img) {
     const fallback = img.getAttribute('data-fallback');
     if (fallback && img.src !== fallback) {
         img.src = fallback;
@@ -9,11 +9,11 @@ window.handleImageError = function(img) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    
+
     // --- Mobile Menu Toggle ---
     const menuToggle = document.getElementById('menu-toggle');
     const navMenu = document.getElementById('nav-menu');
-    
+
     if (menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => {
             navMenu.classList.toggle('open');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Header Scroll Effect ---
     const header = document.getElementById('site-header');
-    
+
     if (header) {
         if (!header.classList.contains('scrolled') || window.location.pathname.includes('project-details') || window.location.pathname.includes('about') || window.location.pathname.includes('contact')) {
             // some pages have scrolled by default, let's keep the logic
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const featured = await getFeaturedProjects(5);
             if (featured.length > 0) {
                 homeProjectsGrid.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
-                
+
                 // Add the "View All Work" card at the end
                 homeProjectsGrid.innerHTML += `
                     <a href="projects.html" class="project-card reveal active" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 portfolioGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No projects available.</p>';
             }
-        } catch(error) {
+        } catch (error) {
             console.error(error);
         }
     }
@@ -100,14 +100,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.location.pathname.includes('project-details.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const slug = urlParams.get('slug');
-        
+
         if (slug) {
             try {
                 const project = await getProjectBySlug(slug);
                 if (project) {
                     // Update page title
                     document.title = `${project.title} - Pillarthree Productions`;
-                    
+
                     // Update hero
                     const heroImg = document.getElementById('hero-thumbnail');
                     if (heroImg) {
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         }
                         heroImg.setAttribute('onerror', 'handleImageError(this)');
                     }
-                    
+
                     // Update meta details
                     const metaGrid = document.querySelector('.project-meta-grid');
                     if (metaGrid) {
@@ -126,27 +126,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div class="meta-box"><span class="meta-title">Client</span><span>${project.client}</span></div>
                             <div class="meta-box"><span class="meta-title">Category</span><span>${project.category}</span></div>
                             <div class="meta-box"><span class="meta-title">Director</span><span>${project.director}</span></div>
-                            <div class="meta-box"><span class="meta-title">Year</span><span>${project.year}</span></div>
+                            <div class="meta-box"><span class="meta-title">Agency</span><span>${project.agency}</span></div>
                         `;
                     }
-                    
+
                     // Update body
                     const titleEl = document.querySelector('.project-body .section-title');
                     if (titleEl) titleEl.textContent = project.title;
-                    
+
                     const descEl = document.querySelector('.project-body p');
                     if (descEl) descEl.textContent = project.description || '';
-                    
+
                     const heroContainer = document.getElementById('hero-media-container');
                     const playButton = document.getElementById('hero-play-button');
                     const videoWrapper = document.getElementById('hero-video-wrapper');
                     const imageWrapper = document.getElementById('hero-image-wrapper');
-                    
+
                     if (heroContainer && project.youtubeId) {
                         const loadVideo = () => {
                             imageWrapper.style.opacity = '0';
                             videoWrapper.style.display = 'block';
-                            
+
                             const createPlayer = () => {
                                 videoWrapper.innerHTML = '<div id="yt-player-embed" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>';
                                 new window.YT.Player('yt-player-embed', {
@@ -157,12 +157,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                                         'onError': (event) => {
                                             // Embedding disabled or video unavailable, open in new tab
                                             window.open(project.youtube, '_blank');
-                                            
+
                                             // Revert hero to image state
                                             imageWrapper.style.opacity = '1';
                                             videoWrapper.style.display = 'none';
                                             imageWrapper.style.display = 'block';
-                                            
+
                                             // Allow user to click again to open link directly
                                             heroContainer.addEventListener('click', () => window.open(project.youtube, '_blank'), { once: true });
                                         }
@@ -180,17 +180,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
                                 window.onYouTubeIframeAPIReady = createPlayer;
                             }
-                            
+
                             setTimeout(() => {
                                 videoWrapper.style.opacity = '1';
                                 imageWrapper.style.display = 'none';
                             }, 400); // Wait for transition
-                            
+
                             heroContainer.removeEventListener('click', loadVideo);
                             heroContainer.removeEventListener('keydown', handleKeydown);
                             heroContainer.style.cursor = 'default';
                         };
-                        
+
                         const handleKeydown = (e) => {
                             if (e.key === 'Enter' || e.key === ' ') {
                                 e.preventDefault();
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                         heroContainer.addEventListener('click', loadVideo);
                         heroContainer.addEventListener('keydown', handleKeydown);
-                        
+
                     } else if (heroContainer) {
                         // Hide play button if no video
                         if (playButton) playButton.style.display = 'none';
@@ -209,11 +209,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         heroContainer.removeAttribute('role');
                         heroContainer.removeAttribute('aria-label');
                     }
-                    
+
                     // Hide gallery on dynamic pages since we don't have gallery columns in sheet
                     const gallery = document.querySelector('.project-gallery');
                     if (gallery) gallery.style.display = 'none';
-                    
+
                     // --- Navigation Logic ---
                     const allProjects = await getAllProjects();
                     if (allProjects && allProjects.length > 0) {
@@ -221,13 +221,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (currentIndex !== -1) {
                             const prevIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
                             const nextIndex = (currentIndex + 1) % allProjects.length;
-                            
+
                             const prevProject = allProjects[prevIndex];
                             const nextProject = allProjects[nextIndex];
-                            
+
                             const prevLink = document.getElementById('btn-prev');
                             const nextLink = document.getElementById('btn-next');
-                            
+
                             if (prevLink) {
                                 prevLink.href = `project-details.html?slug=${prevProject.slug}`;
                             }
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             }
                         }
                     }
-                    
+
                 } else {
                     document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
                 }
@@ -256,10 +256,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
+
                 const filterValue = btn.getAttribute('data-filter');
                 const projectCards = document.querySelectorAll('#portfolio-grid .project-card');
-                
+
                 projectCards.forEach(card => {
                     if (filterValue === 'all') {
                         card.style.display = 'block';
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
     }
-    
+
     // Manual trigger of reveals for elements already in DOM
     const revealElements = document.querySelectorAll('.reveal');
     if (revealElements.length > 0) {
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const formMessage = document.getElementById('formMessage');
 
     if (contactForm && submitBtn && formMessage) {
-        contactForm.addEventListener('submit', async function(e) {
+        contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             // Validate form
