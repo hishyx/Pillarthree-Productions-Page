@@ -164,106 +164,39 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Update page title
                     document.title = `${project.title} - Pillarthree Productions`;
 
-                    // Update hero
-                    const heroImg = document.getElementById('hero-thumbnail');
-                    if (heroImg) {
-                        heroImg.src = project.thumbnail;
-                        heroImg.alt = project.title;
-                        if (project.thumbnailFallback) {
-                            heroImg.setAttribute('data-fallback', project.thumbnailFallback);
-                        }
-                        heroImg.setAttribute('onerror', 'handleImageError(this)');
-                    }
-
-                    // Update meta details
-                    const metaGrid = document.querySelector('.project-meta-grid');
-                    if (metaGrid) {
-                        metaGrid.innerHTML = `
-                            <div class="meta-box"><span class="meta-title">Client</span><span>${project.client}</span></div>
-                            <div class="meta-box"><span class="meta-title">Category</span><span>${project.category}</span></div>
-                            <div class="meta-box"><span class="meta-title">Director</span><span>${project.director}</span></div>
-                            <div class="meta-box"><span class="meta-title">Agency</span><span>${project.agency}</span></div>
-                        `;
-                    }
-
-                    // Update body
-                    const titleEl = document.querySelector('.project-body .section-title');
-                    if (titleEl) titleEl.textContent = project.title;
-
-                    const descEl = document.querySelector('.project-body p');
-                    if (descEl) descEl.textContent = project.description || '';
-
+                    // Immediately load YouTube Video in hero
                     const heroContainer = document.getElementById('hero-media-container');
-                    const playButton = document.getElementById('hero-play-button');
                     const videoWrapper = document.getElementById('hero-video-wrapper');
-                    const imageWrapper = document.getElementById('hero-image-wrapper');
 
                     if (heroContainer && project.youtubeId) {
-                        const loadVideo = () => {
-                            imageWrapper.style.opacity = '0';
-                            videoWrapper.style.display = 'block';
+                        videoWrapper.style.display = 'block';
+                        videoWrapper.style.opacity = '1';
 
-                            const createPlayer = () => {
-                                videoWrapper.innerHTML = '<div id="yt-player-embed" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>';
-                                new window.YT.Player('yt-player-embed', {
-                                    videoId: project.youtubeId,
-                                    playerVars: { 'autoplay': 1, 'rel': 0 },
-                                    events: {
-                                        'onReady': (event) => event.target.playVideo(),
-                                        'onError': (event) => {
-                                            // Embedding disabled or video unavailable, open in new tab
-                                            window.open(project.youtube, '_blank');
-
-                                            // Revert hero to image state
-                                            imageWrapper.style.opacity = '1';
-                                            videoWrapper.style.display = 'none';
-                                            imageWrapper.style.display = 'block';
-
-                                            // Allow user to click again to open link directly
-                                            heroContainer.addEventListener('click', () => window.open(project.youtube, '_blank'), { once: true });
-                                        }
+                        const createPlayer = () => {
+                            videoWrapper.innerHTML = '<div id="yt-player-embed" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>';
+                            new window.YT.Player('yt-player-embed', {
+                                videoId: project.youtubeId,
+                                playerVars: { 'autoplay': 1, 'mute': 1, 'rel': 0, 'playsinline': 1 },
+                                events: {
+                                    'onReady': (event) => {
+                                        event.target.playVideo();
+                                    },
+                                    'onError': (event) => {
+                                        console.error('YouTube Player Error:', event.data);
                                     }
-                                });
-                            };
-
-                            if (window.YT && window.YT.Player) {
-                                createPlayer();
-                            } else {
-                                // Load YouTube IFrame API
-                                const tag = document.createElement('script');
-                                tag.src = "https://www.youtube.com/iframe_api";
-                                const firstScriptTag = document.getElementsByTagName('script')[0];
-                                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                                window.onYouTubeIframeAPIReady = createPlayer;
-                            }
-
-                            setTimeout(() => {
-                                videoWrapper.style.opacity = '1';
-                                imageWrapper.style.display = 'none';
-                            }, 400); // Wait for transition
-
-                            heroContainer.removeEventListener('click', loadVideo);
-                            heroContainer.removeEventListener('keydown', handleKeydown);
-                            heroContainer.style.cursor = 'default';
+                                }
+                            });
                         };
 
-                        const handleKeydown = (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                loadVideo();
-                            }
-                        };
-
-                        heroContainer.addEventListener('click', loadVideo);
-                        heroContainer.addEventListener('keydown', handleKeydown);
-
-                    } else if (heroContainer) {
-                        // Hide play button if no video
-                        if (playButton) playButton.style.display = 'none';
-                        heroContainer.style.cursor = 'default';
-                        heroContainer.removeAttribute('tabindex');
-                        heroContainer.removeAttribute('role');
-                        heroContainer.removeAttribute('aria-label');
+                        if (window.YT && window.YT.Player) {
+                            createPlayer();
+                        } else {
+                            const tag = document.createElement('script');
+                            tag.src = "https://www.youtube.com/iframe_api";
+                            const firstScriptTag = document.getElementsByTagName('script')[0];
+                            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                            window.onYouTubeIframeAPIReady = createPlayer;
+                        }
                     }
 
                     // Hide gallery on dynamic pages since we don't have gallery columns in sheet
