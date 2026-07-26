@@ -15,8 +15,8 @@
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
-  --spacing-lg: 3.5rem;
-  --spacing-xl: 5rem;
+  --spacing-lg: 2.5rem;
+  --spacing-xl: 4rem;
 
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -170,8 +170,8 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.65rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.6rem;
   border-width: 1px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -361,7 +361,7 @@ a:hover {
 }
 
 .project-category {
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -412,8 +412,8 @@ a:hover {
 
 /* Client Logo Strip */
 .client-strip {
-  padding: 4px 0;
-  height: 32px;
+  padding: 0;
+  height: 28px;
   border-top: 1px solid rgba(255,255,255,0.02);
   border-bottom: 1px solid rgba(255,255,255,0.02);
   overflow: hidden;
@@ -430,12 +430,12 @@ a:hover {
 }
 
 .client-logo {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 300;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   margin: 0;
-  filter: grayscale(100%) opacity(0.15);
+  filter: grayscale(100%) opacity(0.08);
   transition: filter var(--transition-normal);
 }
 
@@ -556,8 +556,8 @@ a:hover {
 
 @media (max-width: 768px) {
   :root {
-    --spacing-xl: 4rem;
-    --spacing-lg: 3rem;
+    --spacing-xl: 3rem;
+    --spacing-lg: 2rem;
   }
   
   .nav-menu {
@@ -689,8 +689,12 @@ a:hover {
 
 @media (max-width: 768px) {
   .projects-carousel .project-card {
-    flex: 0 0 90%;
+    flex: 0 0 92%;
     aspect-ratio: 5/4;
+  }
+  
+  .hero-actions .btn-secondary {
+    display: none;
   }
 }
 
@@ -740,32 +744,6 @@ a:hover {
 
 
 
-.carousel-dots {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 1rem;
-    padding-bottom: 0.5rem;
-  }
-  
-  .carousel-dots .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: all 0.3s ease;
-  }
-  
-  .carousel-dots .dot.active {
-    background: var(--text-accent);
-    transform: scale(1.2);
-  }
-}
 
 /* Project Details Page */
 .project-hero {
@@ -948,7 +926,7 @@ a:hover {
 
 .btn-outline {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.06);
   color: var(--text-primary);
 }
 
