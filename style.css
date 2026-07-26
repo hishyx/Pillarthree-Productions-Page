@@ -15,8 +15,8 @@
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
-  --spacing-lg: 4rem;
-  --spacing-xl: 8rem;
+  --spacing-lg: 3.5rem;
+  --spacing-xl: 6rem;
 
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -170,8 +170,9 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 2rem;
-  font-size: 0.875rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.75rem;
+  border-width: 1px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-family: var(--font-body);
@@ -360,10 +361,10 @@ a:hover {
 }
 
 .project-category {
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.65rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   color: var(--text-accent);
   margin-bottom: var(--spacing-xs);
   z-index: 2;
@@ -374,8 +375,8 @@ a:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -408,7 +409,8 @@ a:hover {
 
 /* Client Logo Strip */
 .client-strip {
-  padding: var(--spacing-sm) 0;
+  padding: 8px 0;
+  height: 40px;
   border-top: 1px solid rgba(255,255,255,0.02);
   border-bottom: 1px solid rgba(255,255,255,0.02);
   overflow: hidden;
@@ -425,8 +427,12 @@ a:hover {
 }
 
 .client-logo {
-  height: 24px;
-  filter: grayscale(100%) opacity(0.3);
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+  filter: grayscale(100%) opacity(0.2);
   transition: filter var(--transition-normal);
 }
 
@@ -674,13 +680,14 @@ a:hover {
 
 @media (max-width: 992px) {
   .projects-carousel .project-card {
-    flex: 0 0 calc(80% - var(--spacing-md));
+    flex: 0 0 calc(90% - var(--spacing-md));
   }
 }
 
 @media (max-width: 768px) {
   .projects-carousel .project-card {
-    flex: 0 0 90%;
+    flex: 0 0 95%;
+    aspect-ratio: 4/3;
   }
 }
 
@@ -688,8 +695,8 @@ a:hover {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   background: rgba(0,0,0,0.5);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255,255,255,0.2);
@@ -710,16 +717,16 @@ a:hover {
 }
 
 .carousel-nav.prev {
-  left: -24px;
+  left: -18px;
 }
 
 .carousel-nav.next {
-  right: -24px;
+  right: -18px;
 }
 
 .carousel-nav svg {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
 }
 
 @media (max-width: 768px) {
