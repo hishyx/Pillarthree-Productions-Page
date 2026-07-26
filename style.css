@@ -16,7 +16,7 @@
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
   --spacing-lg: 3.5rem;
-  --spacing-xl: 6rem;
+  --spacing-xl: 5rem;
 
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -170,8 +170,8 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.75rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.65rem;
   border-width: 1px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -266,7 +266,7 @@ a:hover {
 }
 
 .hero-title {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   opacity: 0;
   animation: fadeUp 1s ease 0.4s forwards;
 }
@@ -361,12 +361,15 @@ a:hover {
 }
 
 .project-category {
-  font-size: 0.65rem;
-  font-weight: 400;
+  font-size: 0.55rem;
+  font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-accent);
-  margin-bottom: var(--spacing-xs);
+  position: absolute;
+  bottom: var(--spacing-sm);
+  left: var(--spacing-sm);
+  margin-bottom: 0;
   z-index: 2;
 }
 
@@ -409,8 +412,8 @@ a:hover {
 
 /* Client Logo Strip */
 .client-strip {
-  padding: 8px 0;
-  height: 40px;
+  padding: 4px 0;
+  height: 32px;
   border-top: 1px solid rgba(255,255,255,0.02);
   border-bottom: 1px solid rgba(255,255,255,0.02);
   overflow: hidden;
@@ -427,12 +430,12 @@ a:hover {
 }
 
 .client-logo {
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   margin: 0;
-  filter: grayscale(100%) opacity(0.2);
+  filter: grayscale(100%) opacity(0.15);
   transition: filter var(--transition-normal);
 }
 
@@ -458,7 +461,7 @@ a:hover {
   font-size: 1.5rem;
   color: var(--text-primary);
   line-height: 1.5;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   font-weight: 300;
 }
 
@@ -470,7 +473,7 @@ a:hover {
 }
 
 .contact-cta h2 {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
 }
 
 .contact-info {
@@ -653,7 +656,7 @@ a:hover {
   display: flex;
   overflow-x: auto;
   gap: var(--spacing-md);
-  padding-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -686,8 +689,8 @@ a:hover {
 
 @media (max-width: 768px) {
   .projects-carousel .project-card {
-    flex: 0 0 95%;
-    aspect-ratio: 4/3;
+    flex: 0 0 90%;
+    aspect-ratio: 5/4;
   }
 }
 
@@ -735,6 +738,34 @@ a:hover {
   }
 }
 
+
+
+.carousel-dots {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .carousel-dots .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-dots .dot.active {
+    background: var(--text-accent);
+    transform: scale(1.2);
+  }
+}
 
 /* Project Details Page */
 .project-hero {

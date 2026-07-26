@@ -69,6 +69,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             const featured = await getFeaturedProjects(6);
             if (featured.length > 0) {
                 homeCarousel.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
+                
+                // Initialize mobile dots
+                const dotsContainer = document.getElementById('carousel-dots');
+                if (dotsContainer) {
+                    dotsContainer.innerHTML = featured.map((_, i) => `<div class="dot ${i===0 ? 'active' : ''}" data-index="${i}"></div>`).join('');
+                    
+                    // Update dots on scroll
+                    const dots = dotsContainer.querySelectorAll('.dot');
+                    homeCarousel.addEventListener('scroll', () => {
+                        const scrollLeft = homeCarousel.scrollLeft;
+                        const cardWidth = homeCarousel.querySelector('.project-card').offsetWidth;
+                        // Add half a card width to trigger at midpoint
+                        const index = Math.round(scrollLeft / cardWidth);
+                        
+                        dots.forEach((dot, i) => {
+                            dot.classList.toggle('active', i === index);
+                        });
+                    }, { passive: true });
+                }
             } else {
                 homeCarousel.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">No featured projects available.</p>';
             }
