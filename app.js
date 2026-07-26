@@ -167,10 +167,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Immediately load YouTube Video in hero
                     const heroContainer = document.getElementById('hero-media-container');
                     const videoWrapper = document.getElementById('hero-video-wrapper');
+                    const thumbnailWrapper = document.getElementById('hero-thumbnail-wrapper');
+                    const heroThumbnail = document.getElementById('hero-thumbnail');
 
                     if (heroContainer && project.youtubeId) {
+                        // Set thumbnail while loading
+                        if (heroThumbnail) {
+                            heroThumbnail.src = project.thumbnail;
+                            heroThumbnail.alt = project.title;
+                            if (project.thumbnailFallback) {
+                                heroThumbnail.setAttribute('data-fallback', project.thumbnailFallback);
+                            }
+                            heroThumbnail.setAttribute('onerror', 'handleImageError(this)');
+                        }
+
                         videoWrapper.style.display = 'block';
-                        videoWrapper.style.opacity = '1';
 
                         const createPlayer = () => {
                             videoWrapper.innerHTML = '<div id="yt-player-embed" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>';
@@ -180,9 +191,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 events: {
                                     'onReady': (event) => {
                                         event.target.playVideo();
+                                        // Fade out thumbnail and spinner once player is ready
+                                        if (thumbnailWrapper) {
+                                            thumbnailWrapper.style.opacity = '0';
+                                            setTimeout(() => {
+                                                thumbnailWrapper.style.display = 'none';
+                                            }, 600); // Wait for transition
+                                        }
+                                        videoWrapper.style.zIndex = '3';
                                     },
                                     'onError': (event) => {
                                         console.error('YouTube Player Error:', event.data);
+                                        // Hide spinner if there's an error
+                                        const spinner = document.querySelector('.hero-loading-spinner');
+                                        if (spinner) spinner.style.display = 'none';
                                     }
                                 }
                             });

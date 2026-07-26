@@ -739,6 +739,41 @@ a:hover {
   background: var(--bg-primary);
 }
 
+.hero-thumbnail-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  transition: opacity 0.6s ease;
+}
+
+.hero-thumbnail-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5; /* Slight dim for the spinner */
+}
+
+.hero-loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--text-accent);
+  animation: spin 1s ease-in-out infinite;
+  z-index: 3;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 .hero-video-wrapper {
   position: absolute;
   top: 0;
@@ -746,7 +781,7 @@ a:hover {
   width: 100%;
   height: 100%;
   display: none;
-  z-index: 2;
+  z-index: 1; /* Behind thumbnail initially */
 }
 
 .project-meta-grid {
