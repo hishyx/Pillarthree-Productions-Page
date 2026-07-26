@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const header = document.getElementById('site-header');
 
     if (header) {
-        if (!header.classList.contains('scrolled') || window.location.pathname.startsWith('/projects/') && window.location.pathname !== '/projects' && window.location.pathname !== '/projects/' || window.location.pathname.includes('about') || window.location.pathname.includes('contact')) {
+        if (!header.classList.contains('scrolled') || window.location.pathname.startsWith('/project-details/') || window.location.pathname.includes('about') || window.location.pathname.includes('contact')) {
             // some pages have scrolled by default, let's keep the logic
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // category to lowercase for data-category filter if needed
         const categorySlug = project.category ? project.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'all';
         return `
-            <a href="/projects/${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
+            <a href="/project-details/${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
                 <img src="${project.thumbnail}" alt="Project Thumbnail" ${project.thumbnailFallback ? `data-fallback="${project.thumbnailFallback}"` : ''} class="project-img" loading="lazy" onerror="handleImageError(this)">
                 <div class="project-overlay">
                     <span class="project-category">${project.category || 'Project'}</span>
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- Dynamic Project Details Page ---
-    if (window.location.pathname.startsWith('/projects/') && window.location.pathname !== '/projects' && window.location.pathname !== '/projects/') {
+    if (window.location.pathname.startsWith('/project-details/')) {
         const slug = window.location.pathname.split('/').filter(Boolean).pop();
 
         if (slug) {
@@ -284,10 +284,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const nextLink = document.getElementById('btn-next');
 
                             if (prevLink) {
-                                prevLink.href = `/projects/${prevProject.slug}`;
+                                prevLink.href = `/project-details/${prevProject.slug}`;
                             }
                             if (nextLink) {
-                                nextLink.href = `/projects/${nextProject.slug}`;
+                                nextLink.href = `/project-details/${nextProject.slug}`;
                             }
                         }
                     }
