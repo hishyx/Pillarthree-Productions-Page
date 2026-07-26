@@ -266,6 +266,9 @@ a:hover {
 }
 
 .hero-title {
+  font-size: clamp(1.8rem, 10vw, 6rem);
+  width: 100%;
+  word-wrap: break-word;
   margin-bottom: var(--spacing-sm);
   opacity: 0;
   animation: fadeUp 1s ease 0.4s forwards;
