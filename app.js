@@ -49,36 +49,92 @@ document.addEventListener('DOMContentLoaded', async () => {
         const categorySlug = project.category ? project.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'all';
         return `
             <a href="project-details.html?slug=${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
-                <img src="${project.thumbnail}" alt="${project.title}" ${project.thumbnailFallback ? `data-fallback="${project.thumbnailFallback}"` : ''} class="project-img" loading="lazy" onerror="handleImageError(this)">
+                <img src="${project.thumbnail}" alt="Project Thumbnail" ${project.thumbnailFallback ? `data-fallback="${project.thumbnailFallback}"` : ''} class="project-img" loading="lazy" onerror="handleImageError(this)">
                 <div class="project-overlay">
                     <span class="project-category">${project.category || 'Project'}</span>
-                    <h3 class="project-title">${project.title}</h3>
-                    <span class="project-client">${project.client || ''}</span>
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
                 </div>
             </a>
         `;
     }
 
     // --- Dynamic Homepage Featured Projects ---
-    const homeProjectsGrid = document.querySelector('.projects-grid:not(#portfolio-grid)');
-    if (homeProjectsGrid && window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+    const homeCarousel = document.getElementById('home-carousel');
+    if (homeCarousel && (window.location.pathname.endsWith('index.html') || window.location.pathname === '/')) {
         try {
-            const featured = await getFeaturedProjects(5);
+            const featured = await getFeaturedProjects(6);
             if (featured.length > 0) {
-                homeProjectsGrid.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
-
-                // Add the "View All Work" card at the end
-                homeProjectsGrid.innerHTML += `
-                    <a href="projects.html" class="project-card reveal active" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
-                        <h3 class="project-title" style="color: var(--text-accent);">View All Work →</h3>
-                    </a>
-                `;
+                homeCarousel.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
             } else {
-                homeProjectsGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No featured projects available.</p>';
+                homeCarousel.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">No featured projects available.</p>';
             }
         } catch (error) {
             console.error(error);
         }
+        
+        // Carousel Drag Logic
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        homeCarousel.addEventListener('mousedown', (e) => {
+            isDown = true;
+            homeCarousel.classList.add('active');
+            startX = e.pageX - homeCarousel.offsetLeft;
+            scrollLeft = homeCarousel.scrollLeft;
+        });
+        homeCarousel.addEventListener('mouseleave', () => {
+            isDown = false;
+            homeCarousel.classList.remove('active');
+        });
+        homeCarousel.addEventListener('mouseup', () => {
+            isDown = false;
+            homeCarousel.classList.remove('active');
+        });
+        homeCarousel.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - homeCarousel.offsetLeft;
+            const walk = (x - startX) * 2; // scroll-fast
+            homeCarousel.scrollLeft = scrollLeft - walk;
+        });
+        
+        // Desktop Arrows
+        const btnPrev = document.getElementById('carousel-prev');
+        const btnNext = document.getElementById('carousel-next');
+        if (btnPrev && btnNext) {
+            btnPrev.addEventListener('click', () => {
+                homeCarousel.scrollBy({ left: -600, behavior: 'smooth' });
+            });
+            btnNext.addEventListener('click', () => {
+                homeCarousel.scrollBy({ left: 600, behavior: 'smooth' });
+            });
+        }
+
+        // Auto Scroll
+        let autoScrollInterval;
+        const startAutoScroll = () => {
+            autoScrollInterval = setInterval(() => {
+                if (homeCarousel.scrollLeft + homeCarousel.clientWidth >= homeCarousel.scrollWidth - 10) {
+                    homeCarousel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    homeCarousel.scrollBy({ left: 600, behavior: 'smooth' });
+                }
+            }, 3000);
+        };
+        const stopAutoScroll = () => clearInterval(autoScrollInterval);
+
+        startAutoScroll();
+
+        // Pause on interaction
+        homeCarousel.addEventListener('mouseenter', stopAutoScroll);
+        homeCarousel.addEventListener('mouseleave', startAutoScroll);
+        homeCarousel.addEventListener('touchstart', stopAutoScroll, {passive: true});
+        homeCarousel.addEventListener('touchend', startAutoScroll, {passive: true});
     }
 
     // --- Dynamic Projects Page ---
