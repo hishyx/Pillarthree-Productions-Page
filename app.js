@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // category to lowercase for data-category filter if needed
         const categorySlug = project.category ? project.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'all';
         return `
-            <a href="/projects/${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
+            <a href="/projects/?project=${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
                 <img src="${project.thumbnail}" alt="Project Thumbnail" ${project.thumbnailFallback ? `data-fallback="${project.thumbnailFallback}"` : ''} class="project-img" loading="lazy" onerror="handleImageError(this)">
                 <div class="project-overlay">
                     <span class="project-category">${project.category || 'Project'}</span>
@@ -183,22 +183,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- Dynamic Project Details Page ---
+    // --- Dynamic Projects & Details Logic (SPA behavior on /projects/) ---
     let slug = null;
     const path = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
     
-    if (path.includes('/project-details')) {
-        slug = new URLSearchParams(window.location.search).get('slug');
-    } else if (path.startsWith('/projects/') && path !== '/projects/' && !path.endsWith('/index.html')) {
-        slug = path.split('/projects/')[1].replace(/\/$/, '');
+    if (path.includes('/projects') || path.includes('/project-details')) {
+        slug = urlParams.get('project') || urlParams.get('slug');
     }
 
-    // We only execute details logic if there is a slug or we are explicitly on the details page
-    if (slug || path.includes('/project-details') || document.querySelector('.project-body')) {
-        if (slug) {
-            try {
-                const project = await getProjectBySlug(slug);
-                if (project) {
+    const gridView = document.getElementById('projects-grid-view');
+    const detailsView = document.getElementById('project-details-view');
+    const notFoundView = document.getElementById('project-not-found-view');
+
+    if (slug && (gridView || detailsView || document.querySelector('.project-body'))) {
+        if (gridView) gridView.style.display = 'none';
+        
+        try {
+            const project = await getProjectBySlug(slug);
+            if (project) {
+                if (detailsView) detailsView.style.display = 'block';
                     // Update page title
                     document.title = `${project.title} - Pillarthree Productions`;
 
@@ -306,23 +310,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const nextLink = document.getElementById('btn-next');
 
                             if (prevLink) {
-                                prevLink.href = `/projects/${prevProject.slug}`;
+                                prevLink.href = `/projects/?project=${prevProject.slug}`;
                             }
                             if (nextLink) {
-                                nextLink.href = `/projects/${nextProject.slug}`;
+                                nextLink.href = `/projects/?project=${nextProject.slug}`;
                             }
                         }
                     }
 
                 } else {
-                    document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
+                    if (notFoundView) notFoundView.style.display = 'block';
+                    else if (document.querySelector('.project-body')) document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
                 }
             } catch (error) {
                 console.error(error);
             }
-        } else {
-            // No slug provided
-            document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
         }
     }
 

@@ -31,95 +31,71 @@
         </div>
     </header>
 
-    <!-- Projects Header -->
-    <section class="page-header reveal">
-        <div class="container">
-            <h1 class="section-title">Our Work</h1>
-            <div class="filter-nav">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="commercial">Commercial</button>
-                <button class="filter-btn" data-filter="brand-film">Brand Film</button>
-                <button class="filter-btn" data-filter="music-video">Music Video</button>
+    <div id="projects-grid-view">
+        <!-- Projects Header -->
+        <section class="page-header reveal">
+            <div class="container">
+                <h1 class="section-title">Our Work</h1>
+                <div class="filter-nav">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="commercial">Commercial</button>
+                    <button class="filter-btn" data-filter="brand-film">Brand Film</button>
+                    <button class="filter-btn" data-filter="music-video">Music Video</button>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Projects Grid -->
-    <section class="section-padding" style="padding-top: var(--spacing-md);">
-        <div class="container">
-            <div class="projects-grid" id="portfolio-grid">
-                <!-- Project 1 -->
-                <a href="/projects" class="project-card reveal" data-category="commercial">
-                    <img src="/assets/images/project1.webp" alt="KMCT Medical College Hospital" class="project-img"
-                        loading="lazy">
-                    <div class="project-overlay">
-                        <span class="project-category">Commercial</span>
-                        <div class="play-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Project 2 -->
-                <a href="/projects" class="project-card reveal" data-category="brand-film">
-                    <img src="/assets/images/project2.webp" alt="Beauty Mark Gold & Diamonds" class="project-img"
-                        loading="lazy">
-                    <div class="project-overlay">
-                        <span class="project-category">Brand Film</span>
-                        <div class="play-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Project 3 -->
-                <a href="/projects" class="project-card reveal" data-category="commercial">
-                    <img src="/assets/images/project3.webp" alt="Edimannickal Opticals" class="project-img"
-                        loading="lazy">
-                    <div class="project-overlay">
-                        <span class="project-category">Commercial</span>
-                        <div class="play-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Project 4 -->
-                <a href="/projects" class="project-card reveal" data-category="brand-film">
-                    <img src="/assets/images/project4.webp" alt="Popular Gold & Diamonds" class="project-img"
-                        loading="lazy">
-                    <div class="project-overlay">
-                        <span class="project-category">Brand Film</span>
-                        <div class="play-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Project 5 -->
-                <a href="/projects" class="project-card reveal" data-category="music-video">
-                    <img src="/assets/images/project5.webp" alt="Harr Disha Music Video" class="project-img"
-                        loading="lazy">
-                    <div class="project-overlay">
-                        <span class="project-category">Music Video</span>
-                        <div class="play-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
+        <!-- Projects Grid -->
+        <section class="section-padding" style="padding-top: var(--spacing-md);">
+            <div class="container">
+                <div class="projects-grid" id="portfolio-grid">
+                    <!-- Loaded dynamically -->
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+
+    <!-- Project Details View (Hidden by default) -->
+    <div id="project-details-view" style="display: none;">
+        <!-- Project Hero (Video) -->
+        <section class="project-hero reveal" id="hero-media-container">
+            <div id="hero-thumbnail-wrapper" class="hero-thumbnail-wrapper">
+                <img src="/assets/images/project1.webp" alt="Loading Project..." loading="lazy" id="hero-thumbnail">
+                <div class="hero-loading-spinner"></div>
+            </div>
+            <div id="hero-video-wrapper" class="hero-video-wrapper" style="display: none;"></div>
+        </section>
+
+        <!-- Project Details -->
+        <section class="container">
+            <div class="project-meta-grid reveal" id="project-meta-grid">
+                <!-- Dynamically populated via JS -->
+            </div>
+            
+            <div class="project-body reveal">
+                <h1 class="section-title" id="project-title"></h1>
+                <p style="max-width: 800px; margin-top: var(--spacing-sm);" id="project-description"></p>
+                
+                <div class="project-gallery">
+                    <!-- Unused since data doesn't provide gallery, but keeping for structure -->
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="project-nav">
+                <a href="#" class="btn btn-secondary" id="btn-prev">← Previous Project</a>
+                <a href="/projects/" class="btn btn-outline" id="btn-all">All Projects</a>
+                <a href="#" class="btn btn-secondary" id="btn-next">Next Project →</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Project Not Found View (Hidden by default) -->
+    <div id="project-not-found-view" style="display: none; text-align: center; padding: 100px 20px;">
+        <h2 style="margin-bottom: 20px;">Project not found</h2>
+        <p style="margin-bottom: 30px; color: var(--text-secondary);">The project you are looking for does not exist or has been removed.</p>
+        <a href="/projects/" class="btn btn-primary">Back to Projects</a>
+    </div>
 
     <!-- Footer -->
     <footer class="site-footer">
