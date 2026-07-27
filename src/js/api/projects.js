@@ -46,7 +46,6 @@ function normalizeProject(rawRow, index, existingSlugs) {
     const director = (row.director || '').trim() || 'Not specified';
     const agency = (row.agency || '').trim() || 'Not specified';
     const description = (row.description || '').trim() || 'Description coming soon.';
-    let slug = (row.slug || '').trim();
     let thumbnail = (row.thumbnail || '').trim();
 
     // 3. Validate Required Fields
@@ -61,10 +60,8 @@ function normalizeProject(rawRow, index, existingSlugs) {
         return null;
     }
 
-    // 4. Generate Missing Slug
-    if (!slug) {
-        slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-    }
+    // 4. Generate Slug
+    let slug = title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
     // Handle Duplicate Slugs
     let baseSlug = slug;

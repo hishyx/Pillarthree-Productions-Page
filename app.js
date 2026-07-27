@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // category to lowercase for data-category filter if needed
         const categorySlug = project.category ? project.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'all';
         return `
-            <a href="/project-details?slug=${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
+            <a href="/projects/${project.slug}" class="project-card reveal active" data-category="${categorySlug}">
                 <img src="${project.thumbnail}" alt="Project Thumbnail" ${project.thumbnailFallback ? `data-fallback="${project.thumbnailFallback}"` : ''} class="project-img" loading="lazy" onerror="handleImageError(this)">
                 <div class="project-overlay">
                     <span class="project-category">${project.category || 'Project'}</span>
@@ -184,10 +184,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- Dynamic Project Details Page ---
-    if (window.location.pathname.includes('/project-details')) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const slug = urlParams.get('slug');
+    let slug = null;
+    const path = window.location.pathname;
+    
+    if (path.includes('/project-details')) {
+        slug = new URLSearchParams(window.location.search).get('slug');
+    } else if (path.startsWith('/projects/') && path !== '/projects/' && !path.endsWith('/index.html')) {
+        slug = path.split('/projects/')[1].replace(/\/$/, '');
+    }
 
+    // We only execute details logic if there is a slug or we are explicitly on the details page
+    if (slug || path.includes('/project-details') || document.querySelector('.project-body')) {
         if (slug) {
             try {
                 const project = await getProjectBySlug(slug);
@@ -299,10 +306,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                             const nextLink = document.getElementById('btn-next');
 
                             if (prevLink) {
-                                prevLink.href = `/project-details?slug=${prevProject.slug}`;
+                                prevLink.href = `/projects/${prevProject.slug}`;
                             }
                             if (nextLink) {
-                                nextLink.href = `/project-details?slug=${nextProject.slug}`;
+                                nextLink.href = `/projects/${nextProject.slug}`;
                             }
                         }
                     }
