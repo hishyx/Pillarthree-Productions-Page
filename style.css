@@ -304,6 +304,7 @@ a:hover {
 
 .section-title {
   margin-bottom: var(--spacing-sm);
+  font-size: clamp(1rem, 2vw, 1.75rem);
 }
 
 .section-desc {
