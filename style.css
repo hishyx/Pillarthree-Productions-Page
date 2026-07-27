@@ -890,6 +890,17 @@ a:hover {
   gap: var(--spacing-md);
 }
 
+.team-role {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-accent);
+  margin-top: 0.5rem;
+}
+
 .team-card img {
   width: 100%;
   aspect-ratio: 3/4;
