@@ -321,7 +321,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error(error);
             }
         }
-    }
 
     // --- Projects Filtering (on projects.html) ---
     const filterBtns = document.querySelectorAll('.filter-btn');
