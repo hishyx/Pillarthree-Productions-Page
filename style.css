@@ -479,6 +479,7 @@ a:hover {
 
 .contact-cta h2 {
   margin-bottom: var(--spacing-sm);
+  font-size: clamp(1.5rem, 3vw, 2.625rem);
 }
 
 .contact-info {
