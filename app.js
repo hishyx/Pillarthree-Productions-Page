@@ -69,6 +69,37 @@ document.addEventListener('DOMContentLoaded', async () => {
             const featured = await getFeaturedProjects(6);
             if (featured.length > 0) {
                 homeCarousel.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
+                
+                const pagination = document.getElementById('carousel-pagination');
+                if (pagination) {
+                    pagination.innerHTML = '';
+                    featured.forEach((_, i) => {
+                        const dot = document.createElement('div');
+                        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                        dot.addEventListener('click', () => {
+                            const cardWidth = homeCarousel.querySelector('.project-card').offsetWidth;
+                            const gap = parseInt(window.getComputedStyle(homeCarousel).gap) || 0;
+                            homeCarousel.scrollTo({ left: i * (cardWidth + gap), behavior: 'smooth' });
+                        });
+                        pagination.appendChild(dot);
+                    });
+
+                    homeCarousel.addEventListener('scroll', () => {
+                        const cardWidth = homeCarousel.querySelector('.project-card').offsetWidth;
+                        const gap = parseInt(window.getComputedStyle(homeCarousel).gap) || 0;
+                        const scrollPosition = homeCarousel.scrollLeft;
+                        const activeIndex = Math.round(scrollPosition / (cardWidth + gap));
+                        
+                        const dots = pagination.querySelectorAll('.carousel-dot');
+                        dots.forEach((dot, index) => {
+                            if (index === activeIndex) {
+                                dot.classList.add('active');
+                            } else {
+                                dot.classList.remove('active');
+                            }
+                        });
+                    }, { passive: true });
+                }
             } else {
                 homeCarousel.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%;">No featured projects available.</p>';
             }

@@ -266,9 +266,10 @@ a:hover {
 }
 
 .hero-title {
-  font-size: clamp(1.8rem, 10vw, 6rem);
+  font-size: 6rem;
   width: 100%;
-  word-wrap: break-word;
+  word-wrap: normal;
+  word-break: keep-all;
   margin-bottom: var(--spacing-sm);
   opacity: 0;
   animation: fadeUp 1s ease 0.4s forwards;
@@ -552,6 +553,10 @@ a:hover {
 
 /* Responsive */
 @media (max-width: 992px) {
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 5rem);
+  }
+  
   .about-preview {
     grid-template-columns: 1fr;
   }
@@ -561,6 +566,10 @@ a:hover {
   :root {
     --spacing-xl: 3rem;
     --spacing-lg: 2rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 9vw, 3rem);
   }
   
   .nav-menu {
@@ -743,6 +752,29 @@ a:hover {
   .carousel-nav {
     display: none;
   }
+}
+
+.carousel-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: var(--spacing-sm);
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.carousel-dot.active {
+  background-color: var(--text-accent);
+  width: 20px;
+  border-radius: 10px;
 }
 
 
