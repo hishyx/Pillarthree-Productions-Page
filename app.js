@@ -195,6 +195,34 @@ document.addEventListener('DOMContentLoaded', async () => {
                     // Update page title
                     document.title = `${project.title} - Pillarthree Productions`;
 
+                    // Populate Project Meta and Info
+                    const metaGrid = document.getElementById('project-meta-grid');
+                    if (metaGrid) {
+                        let metaHTML = '';
+                        if (project.client) {
+                            metaHTML += `<div class="meta-box"><span class="meta-title">Client</span><span>${project.client}</span></div>`;
+                        }
+                        if (project.category) {
+                            metaHTML += `<div class="meta-box"><span class="meta-title">Category</span><span>${project.category}</span></div>`;
+                        }
+                        if (project.director) {
+                            metaHTML += `<div class="meta-box"><span class="meta-title">Director</span><span>${project.director}</span></div>`;
+                        }
+                        if (project.year) {
+                            metaHTML += `<div class="meta-box"><span class="meta-title">Year</span><span>${project.year}</span></div>`;
+                        }
+                        if (project.agency) {
+                            metaHTML += `<div class="meta-box"><span class="meta-title">Agency</span><span>${project.agency}</span></div>`;
+                        }
+                        metaGrid.innerHTML = metaHTML;
+                    }
+
+                    const titleEl = document.getElementById('project-title');
+                    if (titleEl) titleEl.textContent = project.title;
+
+                    const descEl = document.getElementById('project-description');
+                    if (descEl) descEl.textContent = project.description || '';
+
                     // Immediately load YouTube Video in hero
                     const heroContainer = document.getElementById('hero-media-container');
                     const videoWrapper = document.getElementById('hero-video-wrapper');
