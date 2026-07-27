@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const header = document.getElementById('site-header');
 
     if (header) {
-        if (!header.classList.contains('scrolled') || window.location.pathname.includes('/project-details') || window.location.pathname.includes('about') || window.location.pathname.includes('contact')) {
+        if (!header.classList.contains('scrolled') || window.location.pathname.includes('about') || window.location.pathname.includes('contact') || new URLSearchParams(window.location.search).has('project')) {
             // some pages have scrolled by default, let's keep the logic
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
@@ -184,13 +184,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- Dynamic Projects & Details Logic (SPA behavior on /projects/) ---
-    let slug = null;
-    const path = window.location.pathname;
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (path.includes('/projects') || path.includes('/project-details')) {
-        slug = urlParams.get('project') || urlParams.get('slug');
-    }
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("project");
 
     const gridView = document.getElementById('projects-grid-view');
     const detailsView = document.getElementById('project-details-view');
