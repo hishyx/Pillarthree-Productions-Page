@@ -1,4 +1,5 @@
-import { getAllProjects, getFeaturedProjects, getProjectBySlug } from './src/js/api/projects.js';
+import { getAllProjects, getFeaturedProjects, getProjectBySlug } from './api/projects.js';
+import { getAllBlogPosts, getFeaturedBlogPosts, getBlogPostBySlug } from './api/blog.js';
 
 // Global error handler for image fallbacks provided by API
 window.handleImageError = function (img) {
@@ -57,6 +58,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <path d="M8 5v14l11-7z"/>
                         </svg>
                     </div>
+                </div>
+            </a>
+        `;
+    }
+
+    // Helper to generate blog card HTML
+    function createBlogCard(post) {
+        const categorySlug = post.category ? post.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'all';
+        return `
+            <a href="/blog/?article=${post.slug}" class="blog-card reveal active" data-category="${categorySlug}">
+                <div class="blog-card-img-wrapper">
+                    <img src="${post.thumbnail}" alt="${post.title}" class="blog-card-img" loading="lazy">
+                </div>
+                <div class="blog-card-content">
+                    <div class="blog-card-meta">
+                        <span class="blog-card-category">${post.category}</span>
+                        <span>${post.date}</span>
+                    </div>
+                    <h3 class="blog-card-title">${post.title}</h3>
+                    <p class="blog-card-excerpt">${post.excerpt}</p>
+                    <span class="blog-card-read-more">Read Article <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
                 </div>
             </a>
         `;
@@ -166,6 +188,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         homeCarousel.addEventListener('mouseleave', startAutoScroll);
         homeCarousel.addEventListener('touchstart', stopAutoScroll, {passive: true});
         homeCarousel.addEventListener('touchend', startAutoScroll, {passive: true});
+    }
+
+    // --- Dynamic Homepage Blog Section ---
+    const homeBlogGrid = document.getElementById('home-blog-grid');
+    if (homeBlogGrid && (window.location.pathname.endsWith('index.html') || window.location.pathname === '/')) {
+        try {
+            const latestPosts = await getFeaturedBlogPosts(3);
+            if (latestPosts.length > 0) {
+                homeBlogGrid.innerHTML = latestPosts.map(p => createBlogCard(p)).join('');
+            } else {
+                homeBlogGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No articles available.</p>';
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     // --- Dynamic Projects Page ---
@@ -321,6 +358,133 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error(error);
             }
         }
+
+    // --- Dynamic Blog Page & Article Details ---
+    const blogGridView = document.getElementById('blog-grid-view');
+    const articleDetailsView = document.getElementById('article-details-view');
+    const articleNotFoundView = document.getElementById('article-not-found-view');
+    const blogPageGrid = document.getElementById('blog-page-grid');
+
+    const articleParams = new URLSearchParams(window.location.search);
+    const articleSlug = articleParams.get("article");
+
+    if (blogPageGrid && !articleSlug) {
+        try {
+            const allPosts = await getAllBlogPosts();
+            if (allPosts.length > 0) {
+                blogPageGrid.innerHTML = allPosts.map(p => createBlogCard(p)).join('');
+            } else {
+                blogPageGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No articles available.</p>';
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    if (articleSlug && (blogGridView || articleDetailsView)) {
+        if (blogGridView) blogGridView.style.display = 'none';
+        
+        try {
+            const article = await getBlogPostBySlug(articleSlug);
+            if (article) {
+                if (articleDetailsView) articleDetailsView.style.display = 'block';
+                document.title = `${article.title} - Pillarthree Productions`;
+
+                const catEl = document.getElementById('article-category');
+                if (catEl) catEl.textContent = article.category;
+                
+                const titleEl = document.getElementById('article-title');
+                if (titleEl) titleEl.textContent = article.title;
+
+                const authorEl = document.getElementById('article-author');
+                if (authorEl) authorEl.textContent = article.author;
+
+                const dateEl = document.getElementById('article-date');
+                if (dateEl) dateEl.textContent = article.date;
+
+                const timeEl = document.getElementById('article-reading-time');
+                if (timeEl) timeEl.textContent = article.readingTime;
+
+                const imgEl = document.getElementById('article-hero-img');
+                if (imgEl) {
+                    imgEl.src = article.thumbnail;
+                    imgEl.alt = article.title;
+                }
+
+                const contentEl = document.getElementById('article-content');
+                if (contentEl) {
+                    if (window.marked && window.DOMPurify) {
+                        const parsedHTML = window.marked.parse(article.content);
+                        contentEl.innerHTML = window.DOMPurify.sanitize(parsedHTML);
+                    } else {
+                        contentEl.innerHTML = article.content;
+                    }
+                }
+
+                // Article Navigation
+                const allPosts = await getAllBlogPosts();
+                if (allPosts && allPosts.length > 0) {
+                    const currentIndex = allPosts.findIndex(p => p.slug === articleSlug);
+                    if (currentIndex !== -1) {
+                        const prevIndex = (currentIndex - 1 + allPosts.length) % allPosts.length;
+                        const nextIndex = (currentIndex + 1) % allPosts.length;
+
+                        const prevLink = document.getElementById('btn-article-prev');
+                        const nextLink = document.getElementById('btn-article-next');
+
+                        if (prevLink) prevLink.href = `/blog/?article=${allPosts[prevIndex].slug}`;
+                        if (nextLink) nextLink.href = `/blog/?article=${allPosts[nextIndex].slug}`;
+                    }
+
+                    // Related Articles (filtered by category)
+                    const relatedGrid = document.getElementById('related-articles-grid');
+                    if (relatedGrid) {
+                        let related = allPosts.filter(p => p.slug !== articleSlug && p.category === article.category);
+                        if (related.length === 0) {
+                            // fallback to any if no same category
+                            related = allPosts.filter(p => p.slug !== articleSlug);
+                        }
+                        relatedGrid.innerHTML = related.slice(0, 2).map(p => createBlogCard(p)).join('');
+                    }
+                }
+
+            } else {
+                if (articleNotFoundView) articleNotFoundView.style.display = 'block';
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // --- Blog Filtering ---
+    const blogFilterBtns = document.querySelectorAll('#blog-grid-view .filter-btn');
+    if (blogFilterBtns.length > 0 && blogPageGrid) {
+        blogFilterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                blogFilterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+                const blogCards = document.querySelectorAll('#blog-page-grid .blog-card');
+
+                blogCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'flex';
+                        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50);
+                    } else {
+                        if (card.getAttribute('data-category') === filterValue) {
+                            card.style.display = 'flex';
+                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(10px)';
+                            setTimeout(() => { card.style.display = 'none'; }, 300);
+                        }
+                    }
+                });
+            });
+        });
+    }
 
     // --- Projects Filtering (on projects.html) ---
     const filterBtns = document.querySelectorAll('.filter-btn');

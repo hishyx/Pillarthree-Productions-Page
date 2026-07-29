@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Pillarthree Productions</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="site-header" id="site-header">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <img src="/assets/images/logo.webp" alt="Pillarthree Productions Logo" class="logo-img">
+            </a>
+            <nav class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/projects" class="nav-link">Projects</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/blog" class="nav-link active">Blog</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </nav>
+            <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <div id="blog-grid-view">
+        <!-- Blog Header -->
+        <section class="page-header reveal">
+            <div class="container">
+                <h1 class="section-title">Journal</h1>
+                <div class="filter-nav">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="industry-insights">Industry Insights</button>
+                    <button class="filter-btn" data-filter="behind-the-scenes">Behind The Scenes</button>
+                    <button class="filter-btn" data-filter="pre-production">Pre-Production</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Grid -->
+        <section class="section-padding" style="padding-top: var(--spacing-md);">
+            <div class="container">
+                <div class="blog-grid" id="blog-page-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Article View (Hidden by default) -->
+    <div id="article-details-view" style="display: none;">
+        <article class="article-container reveal">
+            <header class="article-header">
+                <span class="article-category" id="article-category"></span>
+                <h1 class="article-title" id="article-title"></h1>
+                <div class="article-meta">
+                    <span id="article-author"></span> • 
+                    <span id="article-date"></span> • 
+                    <span id="article-reading-time"></span>
+                </div>
+            </header>
+            
+            <div class="container" style="max-width: 1000px; text-align: center;">
+                <img src="" alt="" class="article-hero-img" id="article-hero-img">
+            </div>
+            
+            <div class="container article-content" id="article-content">
+                <!-- Content goes here -->
+            </div>
+            
+            <!-- Navigation -->
+            <div class="container" style="max-width: 800px;">
+                <div class="project-nav">
+                    <a href="#" class="btn btn-secondary" id="btn-article-prev">← Previous Article</a>
+                    <a href="/blog/" class="btn btn-outline" id="btn-article-all">All Articles</a>
+                    <a href="#" class="btn btn-secondary" id="btn-article-next">Next Article →</a>
+                </div>
+            </div>
+
+            <!-- Related Articles -->
+            <section class="related-articles container">
+                <h3 class="section-subtitle" style="text-align: center; margin-bottom: var(--spacing-lg);">Related Reading</h3>
+                <div class="blog-grid" id="related-articles-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+        </article>
+    </div>
+
+    <!-- Article Not Found View (Hidden by default) -->
+    <div id="article-not-found-view" style="display: none; text-align: center; padding: 100px 20px; margin-top: 80px;">
+        <h2 style="margin-bottom: 20px;">Article not found</h2>
+        <p style="margin-bottom: 30px; color: var(--text-secondary);">The article you are looking for does not exist or has been removed.</p>
+        <a href="/blog/" class="btn btn-primary">Back to Journal</a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <a href="/" class="logo">
+                    <img src="/assets/images/logo.webp" alt="Pillarthree Productions Logo" style="height: 30px;">
+                </a>
+                <nav class="footer-nav">
+                    <a href="/projects">Projects</a>
+                    <a href="/about">About</a>
+                    <a href="/blog">Blog</a>
+                    <a href="/contact">Contact</a>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Pillarthree Productions. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/pillarthree_productions/" target="_blank">Instagram</a>
+                    <a href="https://www.youtube.com/@PillarThreeProductions" target="_blank">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <script type="module" src="/assets/js/app.js"></script>
+</body>
+
+</html>

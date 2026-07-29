@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pillarthree Productions is a premium Kerala-based film and media production company.">
     <title>Pillarthree Productions</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
@@ -20,6 +20,7 @@
                 <a href="/" class="nav-link active">Home</a>
                 <a href="/projects" class="nav-link">Projects</a>
                 <a href="/about" class="nav-link">About</a>
+                <a href="/blog" class="nav-link">Blog</a>
                 <a href="/contact" class="nav-link">Contact</a>
             </nav>
             <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
@@ -109,6 +110,24 @@
         </div>
     </section>
 
+    <!-- Blog Preview -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-subtitle">Journal</span>
+                <h2 class="section-title">Latest Articles</h2>
+            </div>
+            
+            <div class="blog-grid" id="home-blog-grid">
+                <!-- Dynamic Content Populated by app.js -->
+            </div>
+            
+            <div class="view-all-container reveal" style="text-align: center; margin-top: var(--spacing-lg);">
+                <a href="/blog" class="btn btn-outline">View All Articles</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact CTA -->
     <section class="contact-cta reveal">
         <div class="container">
@@ -142,6 +161,7 @@
                 <nav class="footer-nav">
                     <a href="/projects">Projects</a>
                     <a href="/about">About</a>
+                    <a href="/blog">Blog</a>
                     <a href="/contact">Contact</a>
                 </nav>
             </div>
@@ -155,6 +175,6 @@
         </div>
     </footer>
 
-    <script type="module" src="/app.js"></script>
+    <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>
