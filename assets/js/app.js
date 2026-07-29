@@ -84,6 +84,67 @@ document.addEventListener('DOMContentLoaded', async () => {
         `;
     }
 
+    // Helper to dynamically render and attach event listeners to category filters
+    function renderDynamicFilters(items, filterContainerId, gridSelector, cardSelector) {
+        const filterContainer = document.getElementById(filterContainerId);
+        if (!filterContainer) return;
+
+        // 1. Extract unique categories, ignoring empty/null
+        const uniqueCategories = new Set();
+        items.forEach(item => {
+            if (item.category && item.category.trim() !== '') {
+                uniqueCategories.add(item.category.trim());
+            }
+        });
+
+        // 2. Sort alphabetically
+        const sortedCategories = Array.from(uniqueCategories).sort((a, b) => a.localeCompare(b));
+
+        // 3. Generate HTML
+        let buttonsHTML = `<button class="filter-btn active" data-filter="all">All</button>`;
+        sortedCategories.forEach(cat => {
+            const categorySlug = cat.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            buttonsHTML += `<button class="filter-btn" data-filter="${categorySlug}">${cat}</button>`;
+        });
+
+        filterContainer.innerHTML = buttonsHTML;
+
+        // 4. Attach event listeners
+        const filterBtns = filterContainer.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+                const cards = document.querySelectorAll(`#${gridSelector} .${cardSelector}`);
+
+                cards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = cardSelector === 'blog-card' ? 'flex' : 'block';
+                        setTimeout(() => { 
+                            card.style.opacity = '1'; 
+                            card.style.transform = cardSelector === 'blog-card' ? 'translateY(0)' : 'scale(1)'; 
+                        }, 50);
+                    } else {
+                        if (card.getAttribute('data-category') === filterValue) {
+                            card.style.display = cardSelector === 'blog-card' ? 'flex' : 'block';
+                            setTimeout(() => { 
+                                card.style.opacity = '1'; 
+                                card.style.transform = cardSelector === 'blog-card' ? 'translateY(0)' : 'scale(1)'; 
+                            }, 50);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = cardSelector === 'blog-card' ? 'translateY(10px)' : 'scale(0.95)';
+                            setTimeout(() => { card.style.display = 'none'; }, 300);
+                        }
+                    }
+                });
+            });
+        });
+    }
+
     // --- Dynamic Homepage Featured Projects ---
     const homeCarousel = document.getElementById('home-carousel');
     if (homeCarousel && (window.location.pathname.endsWith('index.html') || window.location.pathname === '/')) {
@@ -212,6 +273,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             const allProjects = await getAllProjects();
             if (allProjects.length > 0) {
                 portfolioGrid.innerHTML = allProjects.map(p => createProjectCard(p)).join('');
+                
+                // Add Dynamic Filters Here
+                const projectsFilterNav = document.getElementById('projects-filter-nav');
+                if (projectsFilterNav) {
+                    renderDynamicFilters(allProjects, 'projects-filter-nav', 'portfolio-grid', 'project-card');
+                }
             } else {
                 portfolioGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No projects available.</p>';
             }
@@ -373,6 +440,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             const allPosts = await getAllBlogPosts();
             if (allPosts.length > 0) {
                 blogPageGrid.innerHTML = allPosts.map(p => createBlogCard(p)).join('');
+                
+                // Add Dynamic Filters Here
+                const blogFilterNav = document.getElementById('blog-filter-nav');
+                if (blogFilterNav) {
+                    renderDynamicFilters(allPosts, 'blog-filter-nav', 'blog-page-grid', 'blog-card');
+                }
             } else {
                 blogPageGrid.innerHTML = '<p style="color: var(--text-secondary); text-align: center; width: 100%; grid-column: 1 / -1;">No articles available.</p>';
             }
@@ -456,65 +529,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- Blog Filtering ---
-    const blogFilterBtns = document.querySelectorAll('#blog-grid-view .filter-btn');
-    if (blogFilterBtns.length > 0 && blogPageGrid) {
-        blogFilterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                blogFilterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const filterValue = btn.getAttribute('data-filter');
-                const blogCards = document.querySelectorAll('#blog-page-grid .blog-card');
-
-                blogCards.forEach(card => {
-                    if (filterValue === 'all') {
-                        card.style.display = 'flex';
-                        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50);
-                    } else {
-                        if (card.getAttribute('data-category') === filterValue) {
-                            card.style.display = 'flex';
-                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 50);
-                        } else {
-                            card.style.opacity = '0';
-                            card.style.transform = 'translateY(10px)';
-                            setTimeout(() => { card.style.display = 'none'; }, 300);
-                        }
-                    }
-                });
-            });
-        });
-    }
-
-    // --- Projects Filtering (on projects.html) ---
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    if (filterBtns.length > 0 && portfolioGrid) {
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const filterValue = btn.getAttribute('data-filter');
-                const projectCards = document.querySelectorAll('#portfolio-grid .project-card');
-
-                projectCards.forEach(card => {
-                    if (filterValue === 'all') {
-                        card.style.display = 'block';
-                        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
-                    } else {
-                        if (card.getAttribute('data-category') === filterValue) {
-                            card.style.display = 'block';
-                            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'scale(1)'; }, 50);
-                        } else {
-                            card.style.opacity = '0';
-                            card.style.transform = 'scale(0.95)';
-                            setTimeout(() => { card.style.display = 'none'; }, 300);
-                        }
-                    }
-                });
-            });
-        });
-    }
 
     // Manual trigger of reveals for elements already in DOM
     const revealElements = document.querySelectorAll('.reveal');
