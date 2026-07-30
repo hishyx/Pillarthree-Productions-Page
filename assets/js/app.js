@@ -123,16 +123,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 cards.forEach(card => {
                     if (filterValue === 'all') {
                         card.style.display = cardSelector === 'blog-card' ? 'flex' : 'block';
-                        setTimeout(() => { 
-                            card.style.opacity = '1'; 
-                            card.style.transform = cardSelector === 'blog-card' ? 'translateY(0)' : 'scale(1)'; 
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = cardSelector === 'blog-card' ? 'translateY(0)' : 'scale(1)';
                         }, 50);
                     } else {
                         if (card.getAttribute('data-category') === filterValue) {
                             card.style.display = cardSelector === 'blog-card' ? 'flex' : 'block';
-                            setTimeout(() => { 
-                                card.style.opacity = '1'; 
-                                card.style.transform = cardSelector === 'blog-card' ? 'translateY(0)' : 'scale(1)'; 
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = cardSelector === 'blog-card' ? 'translateY(0)' : 'scale(1)';
                             }, 50);
                         } else {
                             card.style.opacity = '0';
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const featured = await getFeaturedProjects(6);
             if (featured.length > 0) {
                 homeCarousel.innerHTML = featured.map(p => createProjectCard(p, true)).join('');
-                
+
                 const pagination = document.getElementById('carousel-pagination');
                 if (pagination) {
                     pagination.innerHTML = '';
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const gap = parseInt(window.getComputedStyle(homeCarousel).gap) || 0;
                         const scrollPosition = homeCarousel.scrollLeft;
                         const activeIndex = Math.round(scrollPosition / (cardWidth + gap));
-                        
+
                         const dots = pagination.querySelectorAll('.carousel-dot');
                         dots.forEach((dot, index) => {
                             if (index === activeIndex) {
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error(error);
         }
-        
+
         // Carousel Drag Logic
         let isDown = false;
         let startX;
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const walk = (x - startX) * 2; // scroll-fast
             homeCarousel.scrollLeft = scrollLeft - walk;
         });
-        
+
         // Desktop Arrows
         const btnPrev = document.getElementById('carousel-prev');
         const btnNext = document.getElementById('carousel-next');
@@ -247,8 +247,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Pause on interaction
         homeCarousel.addEventListener('mouseenter', stopAutoScroll);
         homeCarousel.addEventListener('mouseleave', startAutoScroll);
-        homeCarousel.addEventListener('touchstart', stopAutoScroll, {passive: true});
-        homeCarousel.addEventListener('touchend', startAutoScroll, {passive: true});
+        homeCarousel.addEventListener('touchstart', stopAutoScroll, { passive: true });
+        homeCarousel.addEventListener('touchend', startAutoScroll, { passive: true });
     }
 
     // --- Dynamic Homepage Blog Section ---
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const allProjects = await getAllProjects();
             if (allProjects.length > 0) {
                 portfolioGrid.innerHTML = allProjects.map(p => createProjectCard(p)).join('');
-                
+
                 // Add Dynamic Filters Here
                 const projectsFilterNav = document.getElementById('projects-filter-nav');
                 if (projectsFilterNav) {
@@ -297,134 +297,134 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (slug && (gridView || detailsView || document.querySelector('.project-body'))) {
         if (gridView) gridView.style.display = 'none';
-        
+
         try {
             const project = await getProjectBySlug(slug);
             if (project) {
                 if (detailsView) detailsView.style.display = 'block';
-                    // Update page title
-                    document.title = `${project.title} - Pillarthree Productions`;
+                // Update page title
+                document.title = `${project.title} - Pillarthree Productions`;
 
-                    // Populate Project Meta and Info
-                    const metaGrid = document.getElementById('project-meta-grid');
-                    if (metaGrid) {
-                        let metaHTML = '';
-                        if (project.client) {
-                            metaHTML += `<div class="meta-box"><span class="meta-title">Client</span><span>${project.client}</span></div>`;
-                        }
-                        if (project.category) {
-                            metaHTML += `<div class="meta-box"><span class="meta-title">Category</span><span>${project.category}</span></div>`;
-                        }
-                        if (project.director) {
-                            metaHTML += `<div class="meta-box"><span class="meta-title">Director</span><span>${project.director}</span></div>`;
-                        }
-                        if (project.year) {
-                            metaHTML += `<div class="meta-box"><span class="meta-title">Year</span><span>${project.year}</span></div>`;
-                        }
-                        if (project.agency) {
-                            metaHTML += `<div class="meta-box"><span class="meta-title">Agency</span><span>${project.agency}</span></div>`;
-                        }
-                        metaGrid.innerHTML = metaHTML;
+                // Populate Project Meta and Info
+                const metaGrid = document.getElementById('project-meta-grid');
+                if (metaGrid) {
+                    let metaHTML = '';
+                    if (project.client) {
+                        metaHTML += `<div class="meta-box"><span class="meta-title">Client</span><span>${project.client}</span></div>`;
                     }
-
-                    const titleEl = document.getElementById('project-title');
-                    if (titleEl) titleEl.textContent = project.title;
-
-                    const descEl = document.getElementById('project-description');
-                    if (descEl) descEl.textContent = project.description || '';
-
-                    // Immediately load YouTube Video in hero
-                    const heroContainer = document.getElementById('hero-media-container');
-                    const videoWrapper = document.getElementById('hero-video-wrapper');
-                    const thumbnailWrapper = document.getElementById('hero-thumbnail-wrapper');
-                    const heroThumbnail = document.getElementById('hero-thumbnail');
-
-                    if (heroContainer && project.youtubeId) {
-                        // Set thumbnail while loading
-                        if (heroThumbnail) {
-                            heroThumbnail.src = project.thumbnail;
-                            heroThumbnail.alt = project.title;
-                            if (project.thumbnailFallback) {
-                                heroThumbnail.setAttribute('data-fallback', project.thumbnailFallback);
-                            }
-                            heroThumbnail.setAttribute('onerror', 'handleImageError(this)');
-                        }
-
-                        videoWrapper.style.display = 'block';
-
-                        const createPlayer = () => {
-                            videoWrapper.innerHTML = '<div id="yt-player-embed" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>';
-                            new window.YT.Player('yt-player-embed', {
-                                videoId: project.youtubeId,
-                                playerVars: { 'autoplay': 1, 'mute': 1, 'rel': 0, 'playsinline': 1 },
-                                events: {
-                                    'onReady': (event) => {
-                                        event.target.playVideo();
-                                        // Fade out thumbnail and spinner once player is ready
-                                        if (thumbnailWrapper) {
-                                            thumbnailWrapper.style.opacity = '0';
-                                            setTimeout(() => {
-                                                thumbnailWrapper.style.display = 'none';
-                                            }, 600); // Wait for transition
-                                        }
-                                        videoWrapper.style.zIndex = '3';
-                                    },
-                                    'onError': (event) => {
-                                        console.error('YouTube Player Error:', event.data);
-                                        // Hide spinner if there's an error
-                                        const spinner = document.querySelector('.hero-loading-spinner');
-                                        if (spinner) spinner.style.display = 'none';
-                                    }
-                                }
-                            });
-                        };
-
-                        if (window.YT && window.YT.Player) {
-                            createPlayer();
-                        } else {
-                            const tag = document.createElement('script');
-                            tag.src = "https://www.youtube.com/iframe_api";
-                            const firstScriptTag = document.getElementsByTagName('script')[0];
-                            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                            window.onYouTubeIframeAPIReady = createPlayer;
-                        }
+                    if (project.category) {
+                        metaHTML += `<div class="meta-box"><span class="meta-title">Category</span><span>${project.category}</span></div>`;
                     }
-
-                    // Hide gallery on dynamic pages since we don't have gallery columns in sheet
-                    const gallery = document.querySelector('.project-gallery');
-                    if (gallery) gallery.style.display = 'none';
-
-                    // --- Navigation Logic ---
-                    const allProjects = await getAllProjects();
-                    if (allProjects && allProjects.length > 0) {
-                        const currentIndex = allProjects.findIndex(p => p.slug === slug);
-                        if (currentIndex !== -1) {
-                            const prevIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
-                            const nextIndex = (currentIndex + 1) % allProjects.length;
-
-                            const prevProject = allProjects[prevIndex];
-                            const nextProject = allProjects[nextIndex];
-
-                            const prevLink = document.getElementById('btn-prev');
-                            const nextLink = document.getElementById('btn-next');
-
-                            if (prevLink) {
-                                prevLink.href = `/projects/?project=${prevProject.slug}`;
-                            }
-                            if (nextLink) {
-                                nextLink.href = `/projects/?project=${nextProject.slug}`;
-                            }
-                        }
+                    if (project.director) {
+                        metaHTML += `<div class="meta-box"><span class="meta-title">Director</span><span>${project.director}</span></div>`;
                     }
-
-                } else {
-                    if (notFoundView) notFoundView.style.display = 'block';
-                    else if (document.querySelector('.project-body')) document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
+                    if (project.year) {
+                        metaHTML += `<div class="meta-box"><span class="meta-title">Year</span><span>${project.year}</span></div>`;
+                    }
+                    if (project.agency) {
+                        metaHTML += `<div class="meta-box"><span class="meta-title">Agency</span><span>${project.agency}</span></div>`;
+                    }
+                    metaGrid.innerHTML = metaHTML;
                 }
-            } catch (error) {
-                console.error(error);
+
+                const titleEl = document.getElementById('project-title');
+                if (titleEl) titleEl.textContent = project.title;
+
+                const descEl = document.getElementById('project-description');
+                if (descEl) descEl.textContent = project.description || '';
+
+                // Immediately load YouTube Video in hero
+                const heroContainer = document.getElementById('hero-media-container');
+                const videoWrapper = document.getElementById('hero-video-wrapper');
+                const thumbnailWrapper = document.getElementById('hero-thumbnail-wrapper');
+                const heroThumbnail = document.getElementById('hero-thumbnail');
+
+                if (heroContainer && project.youtubeId) {
+                    // Set thumbnail while loading
+                    if (heroThumbnail) {
+                        heroThumbnail.src = project.thumbnail;
+                        heroThumbnail.alt = project.title;
+                        if (project.thumbnailFallback) {
+                            heroThumbnail.setAttribute('data-fallback', project.thumbnailFallback);
+                        }
+                        heroThumbnail.setAttribute('onerror', 'handleImageError(this)');
+                    }
+
+                    videoWrapper.style.display = 'block';
+
+                    const createPlayer = () => {
+                        videoWrapper.innerHTML = '<div id="yt-player-embed" style="position:absolute; top:0; left:0; width:100%; height:100%;"></div>';
+                        new window.YT.Player('yt-player-embed', {
+                            videoId: project.youtubeId,
+                            playerVars: { 'autoplay': 1, 'mute': 1, 'rel': 0, 'playsinline': 1 },
+                            events: {
+                                'onReady': (event) => {
+                                    event.target.playVideo();
+                                    // Fade out thumbnail and spinner once player is ready
+                                    if (thumbnailWrapper) {
+                                        thumbnailWrapper.style.opacity = '0';
+                                        setTimeout(() => {
+                                            thumbnailWrapper.style.display = 'none';
+                                        }, 600); // Wait for transition
+                                    }
+                                    videoWrapper.style.zIndex = '3';
+                                },
+                                'onError': (event) => {
+                                    console.error('YouTube Player Error:', event.data);
+                                    // Hide spinner if there's an error
+                                    const spinner = document.querySelector('.hero-loading-spinner');
+                                    if (spinner) spinner.style.display = 'none';
+                                }
+                            }
+                        });
+                    };
+
+                    if (window.YT && window.YT.Player) {
+                        createPlayer();
+                    } else {
+                        const tag = document.createElement('script');
+                        tag.src = "https://www.youtube.com/iframe_api";
+                        const firstScriptTag = document.getElementsByTagName('script')[0];
+                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                        window.onYouTubeIframeAPIReady = createPlayer;
+                    }
+                }
+
+                // Hide gallery on dynamic pages since we don't have gallery columns in sheet
+                const gallery = document.querySelector('.project-gallery');
+                if (gallery) gallery.style.display = 'none';
+
+                // --- Navigation Logic ---
+                const allProjects = await getAllProjects();
+                if (allProjects && allProjects.length > 0) {
+                    const currentIndex = allProjects.findIndex(p => p.slug === slug);
+                    if (currentIndex !== -1) {
+                        const prevIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
+                        const nextIndex = (currentIndex + 1) % allProjects.length;
+
+                        const prevProject = allProjects[prevIndex];
+                        const nextProject = allProjects[nextIndex];
+
+                        const prevLink = document.getElementById('btn-prev');
+                        const nextLink = document.getElementById('btn-next');
+
+                        if (prevLink) {
+                            prevLink.href = `/projects/?project=${prevProject.slug}`;
+                        }
+                        if (nextLink) {
+                            nextLink.href = `/projects/?project=${nextProject.slug}`;
+                        }
+                    }
+                }
+
+            } else {
+                if (notFoundView) notFoundView.style.display = 'block';
+                else if (document.querySelector('.project-body')) document.querySelector('.project-body').innerHTML = '<h2>Project Not Found</h2>';
             }
+        } catch (error) {
+            console.error(error);
         }
+    }
 
     // --- Dynamic Blog Page & Article Details ---
     const blogGridView = document.getElementById('blog-grid-view');
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const allPosts = await getAllBlogPosts();
             if (allPosts.length > 0) {
                 blogPageGrid.innerHTML = allPosts.map(p => createBlogCard(p)).join('');
-                
+
                 // Add Dynamic Filters Here
                 const blogFilterNav = document.getElementById('blog-filter-nav');
                 if (blogFilterNav) {
@@ -456,7 +456,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (articleSlug && (blogGridView || articleDetailsView)) {
         if (blogGridView) blogGridView.style.display = 'none';
-        
+
         try {
             const article = await getBlogPostBySlug(articleSlug);
             if (article) {
@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const catEl = document.getElementById('article-category');
                 if (catEl) catEl.textContent = article.category;
-                
+
                 const titleEl = document.getElementById('article-title');
                 if (titleEl) titleEl.textContent = article.title;
 
@@ -486,11 +486,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const contentEl = document.getElementById('article-content');
                 if (contentEl) {
-                    if (window.marked && window.DOMPurify) {
-                        const parsedHTML = window.marked.parse(article.content);
-                        contentEl.innerHTML = window.DOMPurify.sanitize(parsedHTML);
+                    const html = article.content
+                        .split("\n")
+                        .map(line => line.trim())
+                        .filter(line => line.length > 0)
+                        .map(line => `<p>${line}</p>`)
+                        .join("");
+
+                    if (window.DOMPurify) {
+                        contentEl.innerHTML = window.DOMPurify.sanitize(html);
                     } else {
-                        contentEl.innerHTML = article.content;
+                        contentEl.innerHTML = html;
                     }
                 }
 
